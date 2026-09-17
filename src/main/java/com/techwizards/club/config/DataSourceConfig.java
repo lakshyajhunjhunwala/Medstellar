@@ -68,6 +68,29 @@ public class DataSourceConfig {
             }
         }
 
+        // Check if targetUrl is URI format: mysql://user:password@host:port/database
+        if (targetUrl != null && targetUrl.startsWith("mysql://")) {
+            try {
+                URI uri = new URI(targetUrl);
+                String userInfo = uri.getUserInfo();
+                if (userInfo != null) {
+                    String[] parts = userInfo.split(":", 2);
+                    username = parts[0];
+                    if (parts.length > 1) {
+                        password = parts[1];
+                    }
+                }
+                int port = uri.getPort() > 0 ? uri.getPort() : 3306;
+                String path = uri.getPath();
+                targetUrl = "jdbc:mysql://" + uri.getHost() + ":" + port + path;
+                if (uri.getQuery() != null && !uri.getQuery().trim().isEmpty()) {
+                    targetUrl += "?" + uri.getQuery().trim();
+                }
+            } catch (Exception e) {
+                System.err.println("Warning: Could not parse mysql DATABASE_URL as URI: " + e.getMessage());
+            }
+        }
+
         // Detect if running in cloud container (Render sets RENDER=true or PORT!=8081) and no cloud DB provided
         boolean isRender = "true".equalsIgnoreCase(System.getenv("RENDER"))
                 || (System.getenv("PORT") != null && !"8081".equals(System.getenv("PORT")));
