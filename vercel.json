@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "outputDirectory": "src/main/resources/static",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://medstellar-backend.onrender.com/api/$1"
+    }
+  ]
+}

@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEDSTELLAR | Technical Club</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css?v=2.1">
+</head>
+<body class="dark-theme">
+    
+    <!-- ================= PUBLIC SHELL (LANDING PAGE ONLY) ================= -->
+    <div id="public-shell">
+        <!-- Public Top Navigation -->
+        <header class="public-navbar">
+            <div class="navbar-left">
+                <div class="logo-box-srm">
+                    <img src="logo.png" alt="MEDSTELLAR Logo" class="logo-icon-srm">
+                    <div class="logo-text-srm">
+                        <span class="logo-main">MEDSTELLAR</span>
+                        <span class="logo-sub">Technical Club</span>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-right-srm">
+                <nav class="navbar-links-srm">
+                    <a href="#about-club">About</a>
+                    <a href="#ecosystem">Ecosystem</a>
+                    <a href="#performers">Performers</a>
+                    <a href="#vision">Our Vision</a>
+                </nav>
+                <button class="btn btn-secondary" id="publicSignupBtn" onclick="showSignupModal()" style="margin-right: 8px;">
+                    <i data-lucide="user-plus"></i> Sign Up
+                </button>
+                <button class="btn btn-primary login-btn-glowing" id="publicLoginBtn" onclick="showLoginModal()">
+                    Login
+                </button>
+            </div>
+        </header>
+
+        <!-- Public Landing Content -->
+        <div class="public-container">
+            <!-- Hero Section -->
+            <section class="hero-section-srm" id="about-club">
+                <div class="hero-left-srm">
+                    <div class="pill-badge-srm">Campus Body</div>
+                    <h1 class="hero-title-srm">
+                        Innovate.<br>
+                        <span class="gradient-text">Create.</span><br>
+                        Together.
+                    </h1>
+                    <div class="hero-badges-container">
+                        <div class="badge-item-srm">
+                            <i data-lucide="code-2"></i> Code Excellence
+                        </div>
+                        <div class="badge-item-srm">
+                            <i data-lucide="cpu"></i> Tech Innovation
+                        </div>
+                        <div class="badge-item-srm">
+                            <i data-lucide="graduation-cap"></i> Continuous Learning
+                        </div>
+                    </div>
+                    <button class="btn btn-primary login-btn-glowing-large" id="heroLoginBtn" onclick="showLoginModal()" style="margin-top: 24px;">
+                        Start Your Journey <i data-lucide="arrow-right"></i>
+                    </button>
+                </div>
+                <div class="hero-right-srm" id="performers">
+                    <div class="podium-section-header">
+                        <h3>TOP PERFORMERS</h3>
+                        <p>SEPTEMBER 2025</p>
+                    </div>
+                    
+                    <div class="podium-container">
+                        <!-- 2nd Place: Silver -->
+                        <div class="podium-card silver-card">
+                            <div class="podium-badge">Silver</div>
+                            <div class="podium-icon"><i data-lucide="trophy"></i></div>
+                            <div class="podium-avatar">
+                                <span class="avatar-letter">S</span>
+                            </div>
+                            <h4 class="performer-name">Saksham Gupta</h4>
+                            <div class="performer-score">
+                                <span class="score-num">69 XP</span>
+                                <span class="score-check"><i data-lucide="check-circle-2"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- 1st Place: Gold -->
+                        <div class="podium-card gold-card">
+                            <div class="podium-badge">Gold</div>
+                            <div class="podium-icon"><i data-lucide="crown"></i></div>
+                            <div class="podium-avatar">
+                                <span class="avatar-letter">S</span>
+                            </div>
+                            <h4 class="performer-name">Md Shamirul Huda</h4>
+                            <div class="performer-score">
+                                <span class="score-num">115 XP</span>
+                                <span class="score-check"><i data-lucide="check-circle-2"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- 3rd Place: Bronze -->
+                        <div class="podium-card bronze-card">
+                            <div class="podium-badge">Bronze</div>
+                            <div class="podium-icon"><i data-lucide="award"></i></div>
+                            <div class="podium-avatar">
+                                <span class="avatar-letter">R</span>
+                            </div>
+                            <h4 class="performer-name">VR REVAN</h4>
+                            <div class="performer-score">
+                                <span class="score-num">67 XP</span>
+                                <span class="score-check"><i data-lucide="check-circle-2"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ecosystem Section -->
+            <section class="ecosystem-section-srm" id="ecosystem">
+                <div class="section-header-srm">
+                    <h2 class="section-title-srm">Your Complete <span class="gradient-text">Coding Ecosystem</span></h2>
+                    <p class="section-desc-srm">A holistic platform designed to elevate your competitive programming journey, fostering skill development, team collaboration, and career preparation for successful placements.</p>
+                </div>
+                
+                <div class="ecosystem-grid-srm">
+                    <!-- Left Column: Integrated Platforms -->
+                    <div class="ecosystem-card-srm glass large-card-srm">
+                        <div class="card-header-srm">
+                            <h3>Integrated Platforms</h3>
+                            <span class="platforms-count-badge">4 Platforms Connected</span>
+                        </div>
+                        
+                        <div class="platforms-grid-srm">
+                            <div class="platform-item-srm">
+                                <div class="platform-icon-circle leetcode">
+                                    <svg viewBox="0 0 24 24" width="28" height="28" fill="#f79009">
+                                        <path d="M13.483 0a1.374 1.374 0 0 0-.961.414l-9.58 9.585a1.37 1.37 0 0 0 0 1.94l1.94 1.94a1.37 1.37 0 0 0 1.94 0l9.58-9.585a1.37 1.37 0 0 0 0-1.94l-1.94-1.94A1.374 1.374 0 0 0 13.483 0z"/>
+                                        <path d="M17.361 5.374a1.374 1.374 0 0 0-.961.414l-9.58 9.585a1.37 1.37 0 0 0 0 1.94l1.94 1.94a1.37 1.37 0 0 0 1.94 0l9.58-9.585a1.37 1.37 0 0 0 0-1.94l-1.94-1.94a1.374 1.374 0 0 0-.961-.414z" opacity="0.6"/>
+                                        <path d="M12 16a4 4 0 1 1-4-4 4 4 0 0 1 4 4z" fill="#f79009"/>
+                                    </svg>
+                                </div>
+                                <span class="platform-name-srm">LeetCode</span>
+                            </div>
+                            
+                            <div class="platform-item-srm">
+                                <div class="platform-icon-circle codechef">
+                                    <svg viewBox="0 0 24 24" width="28" height="28" fill="#a1a1aa">
+                                        <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm0 2c2.76 0 5 2.24 5 5 0 1.63-.8 3.06-2 3.98V16h-6v-1.02c-1.2-.92-2-2.35-2-3.98 0-2.76 2.24-5 5-5z"/>
+                                    </svg>
+                                </div>
+                                <span class="platform-name-srm">CodeChef</span>
+                            </div>
+                            
+                            <div class="platform-item-srm">
+                                <div class="platform-icon-circle codeforces">
+                                    <div class="cf-bars">
+                                        <span class="cf-bar-1"></span>
+                                        <span class="cf-bar-2"></span>
+                                        <span class="cf-bar-3"></span>
+                                    </div>
+                                </div>
+                                <span class="platform-name-srm">Codeforces</span>
+                            </div>
+                            
+                            <div class="platform-item-srm">
+                                <div class="platform-icon-circle geeksforgeeks">
+                                    <svg viewBox="0 0 24 24" width="28" height="28" fill="#9ca3af">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                                    </svg>
+                                </div>
+                                <span class="platform-name-srm">GeeksforGeeks</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column: 4 cards grid -->
+                    <div class="ecosystem-cards-grid-srm">
+                        <div class="ecosystem-card-srm glass">
+                            <div class="card-icon-srm green-glow"><i data-lucide="code-2"></i></div>
+                            <h4>Smart Event Management</h4>
+                            <p>Seamlessly schedule and track contests, meetings, and events across multiple platforms with intelligent reminders.</p>
+                        </div>
+                        
+                        <div class="ecosystem-card-srm glass">
+                            <div class="card-icon-srm green-glow"><i data-lucide="line-chart"></i></div>
+                            <h4>Performance Analytics</h4>
+                            <p>Comprehensive real-time tracking of problem-solving progress with detailed performance metrics and insights.</p>
+                        </div>
+                        
+                        <div class="ecosystem-card-srm glass">
+                            <div class="card-icon-srm green-glow"><i data-lucide="share-2"></i></div>
+                            <h4>Resources Shared</h4>
+                            <p>Access a vast library of coding resources, tutorials, and practice problems shared by the community.</p>
+                        </div>
+                        
+                        <div class="ecosystem-card-srm glass">
+                            <div class="card-icon-srm green-glow"><i data-lucide="trophy"></i></div>
+                            <h4>Dynamic Leaderboards</h4>
+                            <p>Engage in healthy competition with real-time rankings that motivate continuous improvement.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vision Section -->
+            <section class="vision-section-srm" id="vision">
+                <div class="section-header-srm">
+                    <h2 class="section-title-srm">Our Vision, <span class="gradient-text">Our Journey</span></h2>
+                    <p class="section-desc-srm">Discover how we're reshaping the landscape of tech education and community collaboration.</p>
+                </div>
+                
+                <div class="video-container-srm glass" onclick="openVideoModal('https://www.youtube.com/embed/nKIu9yen5nc', 'MEDSTELLAR Vision: Why We Code')">
+                    <div class="video-thumbnail-srm">
+                        <div class="tracker-mockup-graphic">
+                            <div class="mockup-header-srm">
+                                <img src="logo.png" alt="MEDSTELLAR Logo" class="logo-icon-srm-mini">
+                                <span class="mockup-title-srm">MEDSTELLAR Technical Club</span>
+                            </div>
+                            <div class="mockup-body-srm">
+                                <h2>ALL IN 1 <span class="badge-green-mock">CODING</span> TRACKER</h2>
+                                <p>Real-time contest synchronizer & algorithm analytics dashboard</p>
+                            </div>
+                        </div>
+                        
+                        <div class="play-btn-overlay-srm">
+                            <div class="play-btn-circle-srm">
+                                <i data-lucide="play" fill="#ededf0" style="color: #ededf0;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Floating Navigation & Back to Top -->
+            <div class="floating-toolbar-srm">
+                <a href="#about-club" class="toolbar-item" title="About"><i data-lucide="sparkles"></i></a>
+                <a href="#ecosystem" class="toolbar-item" title="Coding Ecosystem"><i data-lucide="layers"></i></a>
+                <a href="#performers" class="toolbar-item" title="Top Performers"><i data-lucide="users"></i></a>
+                <a href="#vision" class="toolbar-item" title="Our Vision"><i data-lucide="video"></i></a>
+            </div>
+            
+            <button class="back-to-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <i data-lucide="arrow-up"></i>
+            </button>
+
+            <!-- Public Footer -->
+            <footer class="public-footer">
+                <p>&copy; 2026 MEDSTELLAR Technical Club. All rights reserved.</p>
+            </footer>
+        </div>
+    </div>
+
+
+    <!-- ================= PORTAL SHELL (ACTIVE ONLY AFTER LOGIN) ================= -->
+    <div id="portal-shell" class="app-container hidden">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-box-srm-mini">
+                    <img src="logo.png" alt="MEDSTELLAR Logo" class="logo-icon-srm-mini">
+                    <span class="logo-text-mini" style="font-family: var(--font-heading); font-size: 18px; font-weight: 800; margin-left: 8px;">MED<span class="highlight" style="color: #00e5ff;">STELLAR</span></span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-target="dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#profile" class="nav-item" data-target="profile" id="navProfileItem">
+                    <i data-lucide="user"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="#leaderboard" class="nav-item" data-target="leaderboard">
+                    <i data-lucide="trophy"></i>
+                    <span>Leaderboard</span>
+                </a>
+                <a href="#quizzes" class="nav-item" data-target="quizzes">
+                    <i data-lucide="gamepad-2"></i>
+                    <span>Quizzes & Games</span>
+                </a>
+                <a href="#projects" class="nav-item" data-target="projects">
+                    <i data-lucide="git-branch"></i>
+                    <span>Projects & Collab</span>
+                </a>
+                <a href="#resources" class="nav-item" data-target="resources">
+                    <i data-lucide="book-open"></i>
+                    <span>Learning Hub</span>
+                </a>
+                <a href="#security" class="nav-item" data-target="security" id="navSecurityItem" style="display: none;">
+                    <i data-lucide="shield-check"></i>
+                    <span>Security Center</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile-summary" id="sidebarUserProfile">
+                    <div class="avatar" id="userAvatar">U</div>
+                    <div class="user-meta">
+                        <span class="username" id="sidebarUsername">Username</span>
+                        <span class="user-rank" id="sidebarUserRank">Novice</span>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn" title="Logout">
+                        <i data-lucide="log-out"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Body -->
+        <main class="main-content">
+            
+            <!-- Global Header -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <h2 class="view-title" id="currentViewTitle">Student Dashboard</h2>
+                </div>
+                <div class="top-bar-right">
+                    <div class="streak-badge-mini" id="headerStreakBadge" title="Daily streak tracker">
+                        <i data-lucide="flame" class="fire-icon"></i>
+                        <span id="headerStreakCount">0</span> Day Streak
+                    </div>
+                    <div class="points-badge-mini" id="headerPointsBadge">
+                        <i data-lucide="award" class="award-icon"></i>
+                        <span id="headerPointsCount">0</span> XP
+                    </div>
+                    <div class="system-time">
+                        <i data-lucide="clock"></i>
+                        <span id="liveTime">00:00:00</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Page Container -->
+            <div class="page-container">
+
+                <!-- 1. MEMBER DASHBOARD VIEW -->
+                <section id="view-dashboard" class="page-view active">
+                    <!-- Banner Info Alert (Streak Break Risk) -->
+                    <div id="streakWarningAlert" class="alert-banner warning hidden">
+                        <div class="alert-content">
+                            <i data-lucide="alert-triangle" class="warning-icon"></i>
+                            <div class="alert-text">
+                                <strong>Streak Break Warning!</strong> You have not completed your coding challenge today. Resolve a quiz or sync your activity to prevent your streak from resetting.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Greeting Header -->
+                    <div class="portal-welcome-header">
+                        <h2 class="user-greeting-srm">Hey <span id="dashWelcomeUsername">Stellar</span>! 👋</h2>
+                        <p class="user-subtitle-srm">Ready to conquer some coding challenges today?</p>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="portal-stats-row">
+                        <div class="portal-stat-tile glass">
+                            <div class="tile-icon green-glow"><i data-lucide="award"></i></div>
+                            <div class="tile-details">
+                                <h3 id="dashXPLabel">0 XP</h3>
+                                <p>Accumulated Points</p>
+                            </div>
+                        </div>
+                        
+                        <div class="portal-stat-tile glass">
+                            <div class="tile-icon green-glow"><i data-lucide="trophy"></i></div>
+                            <div class="tile-details">
+                                <h3 id="dashRankBadge">Novice</h3>
+                                <p>Current Rank</p>
+                            </div>
+                        </div>
+
+                        <div class="portal-stat-tile glass">
+                            <div class="tile-icon green-glow"><i data-lucide="line-chart"></i></div>
+                            <div class="tile-details">
+                                <h3>#11</h3>
+                                <p>Previous Rank</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Portal Grid -->
+                    <div class="portal-dashboard-grid margin-top">
+                        
+                        <!-- Left Panel: POTD & Calendar -->
+                        <div class="portal-grid-left">
+                            
+                            <!-- Problems of the Day -->
+                            <div class="card glass">
+                                <div class="card-header justify-between">
+                                    <div class="flex-align">
+                                        <i data-lucide="code-2"></i>
+                                        <h3>Problems of the Day</h3>
+                                    </div>
+                                    <span class="potd-date-tag">Jul 26</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="potd-container">
+                                        <!-- LeetCode Problem -->
+                                        <div class="potd-card glass">
+                                            <div class="potd-header">
+                                                <span class="platform-badge leetcode">LeetCode</span>
+                                                <span class="difficulty-badge easy">Easy</span>
+                                            </div>
+                                            <h4 class="potd-title">Maximum Product of Two Digits</h4>
+                                            <p class="potd-accuracy">Accuracy: <strong>69.3%</strong></p>
+                                            <div class="potd-tags">
+                                                <span class="potd-tag">Math</span>
+                                                <span class="potd-tag">Sorting</span>
+                                            </div>
+                                            <a href="https://leetcode.com" target="_blank" class="potd-solve-btn">
+                                                Solve <i data-lucide="external-link"></i>
+                                            </a>
+                                        </div>
+
+                                        <!-- GfG Problem -->
+                                        <div class="potd-card glass">
+                                            <div class="potd-header">
+                                                <span class="platform-badge geeksforgeeks">GeeksforGeeks</span>
+                                                <span class="difficulty-badge medium">Medium</span>
+                                            </div>
+                                            <h4 class="potd-title">Max Sum Square Sub-Matrix of Size k</h4>
+                                            <p class="potd-accuracy">Accuracy: <strong>50.4%</strong></p>
+                                            <div class="potd-tags">
+                                                <span class="potd-tag">Arrays</span>
+                                                <span class="potd-tag">Matrix</span>
+                                            </div>
+                                            <a href="https://geeksforgeeks.org" target="_blank" class="potd-solve-btn">
+                                                Solve <i data-lucide="external-link"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Coding Journey Calendar -->
+                            <div class="card glass margin-top">
+                                <div class="card-header justify-between">
+                                    <div class="flex-align">
+                                        <i data-lucide="calendar"></i>
+                                        <h3 id="calendarMonthTitle">July 2026</h3>
+                                    </div>
+                                    <div class="calendar-header-actions">
+                                        <button class="btn btn-secondary btn-sm" id="calendarAddEventBtn"><i data-lucide="plus" style="width:12px;"></i> Add Event</button>
+                                        <div class="calendar-tabs">
+                                            <span class="cal-tab active">Month</span>
+                                            <span class="cal-tab">Today</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="calendar-sub">Plan your coding journey and track streak completions</p>
+                                    
+                                    <!-- Calendar Grid -->
+                                    <div class="calendar-grid-container margin-top">
+                                        <div class="calendar-weekdays">
+                                            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                                        </div>
+                                        <div class="calendar-days" id="calendarDaysGrid">
+                                            <!-- Dynamically generated days -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Panel: Top Performers & Streak progress -->
+                        <div class="portal-grid-right">
+                            
+                            <!-- Top Performers Medal List -->
+                            <div class="card glass">
+                                <div class="card-header justify-between">
+                                    <div class="flex-align">
+                                        <i data-lucide="award"></i>
+                                        <h3>Top Performers</h3>
+                                    </div>
+                                    <button class="btn btn-icon" id="refreshLeaderboardBtn" title="Refresh Board">
+                                        <i data-lucide="rotate-cw"></i>
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="performers-medalist-list" id="performersMedalList">
+                                        <!-- Dynamically loaded list of top performers with custom medal counts -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Streak Progress Circle Card -->
+                            <div class="card glass margin-top">
+                                <div class="card-header">
+                                    <i data-lucide="flame" class="fire-icon"></i>
+                                    <h3>Streak Monitor</h3>
+                                </div>
+                                <div class="card-body text-center">
+                                    <div class="streak-circle-srm" id="streakProgressCircle">
+                                        <div class="circle-inner-srm">
+                                            <span class="streak-num-srm" id="dashStreakVal">1</span>
+                                            <span class="streak-lbl-srm">Days Active</span>
+                                        </div>
+                                    </div>
+                                    <div class="streak-bar-progress margin-top">
+                                        <div class="progress-details">
+                                            <span>Next Rank Milestone: <strong>Novice</strong></span>
+                                            <span id="dashXPLabelProgress">0 / 100 XP</span>
+                                        </div>
+                                        <div class="progress-bar-bg">
+                                            <div class="progress-bar-fill" id="dashProgressBarFill" style="width: 0%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- 2. MEMBER PROFILE VIEW -->
+                <section id="view-profile" class="page-view">
+                    <div class="profile-view-container">
+                        
+                        <!-- Emerald Profile Banner Card -->
+                        <div class="profile-banner-card glass">
+                            <div class="profile-banner-left">
+                                <div class="profile-avatar-wrapper">
+                                    <div class="profile-avatar-circle" id="profileAvatar">L</div>
+                                    <span class="profile-avatar-status-badge" title="Active"></span>
+                                </div>
+                                <div class="profile-banner-info">
+                                    <div class="profile-name-row">
+                                        <h2 class="profile-full-name" id="profileFullName">Lakshya Jhunjhunwala</h2>
+                                        <span class="profile-role-badge" id="profileRoleBadge">Admin</span>
+                                        <span class="profile-year-badge" id="profileYearBadge">2nd Year</span>
+                                    </div>
+                                    <div class="profile-status-row">
+                                        <span class="profile-status-emoji" id="profileStatusEmoji">🤩</span>
+                                        <span class="profile-bio-text" id="profileBio">Core Member & Competitive Programmer @ MEDSTELLAR</span>
+                                    </div>
+                                    <div class="profile-email-meta">
+                                        <i data-lucide="mail"></i>
+                                        <span id="profileEmail">lj3384@srmist.edu.in</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-banner-right">
+                                <button class="btn btn-secondary profile-edit-btn" id="openEditProfileBtn">
+                                    <i data-lucide="edit-3"></i> Edit Profile
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Profile Metrics Row -->
+                        <div class="profile-metrics-row margin-top">
+                            <div class="card glass profile-metric-card">
+                                <div class="metric-icon-box cyan">
+                                    <i data-lucide="award"></i>
+                                </div>
+                                <div class="metric-details">
+                                    <div class="metric-top-label">
+                                        <span>TOTAL EXP</span>
+                                        <span class="badge-growth-chip">+35 XP</span>
+                                    </div>
+                                    <h3 class="metric-val" id="profileTotalPoints">1,382 XP</h3>
+                                    <span class="metric-sub">Rank: <span id="profileRankTitle" class="highlight-cyan">Grandmaster</span></span>
+                                </div>
+                            </div>
+
+                            <div class="card glass profile-metric-card">
+                                <div class="metric-icon-box emerald">
+                                    <i data-lucide="trophy"></i>
+                                </div>
+                                <div class="metric-details">
+                                    <div class="metric-top-label">
+                                        <span>INDIVIDUAL RANK</span>
+                                        <span class="badge-growth-chip emerald-chip">Top 5%</span>
+                                    </div>
+                                    <h3 class="metric-val" id="profileCurrentRank">#18</h3>
+                                    <span class="metric-sub">Club Chapter Standing</span>
+                                </div>
+                            </div>
+
+                            <div class="card glass profile-metric-card">
+                                <div class="metric-icon-box purple">
+                                    <i data-lucide="trending-up"></i>
+                                </div>
+                                <div class="metric-details">
+                                    <div class="metric-top-label">
+                                        <span>PREVIOUS RANK</span>
+                                        <span class="badge-growth-chip purple-chip">+1 Rank Gain</span>
+                                    </div>
+                                    <h3 class="metric-val" id="profilePreviousRank">#19</h3>
+                                    <span class="metric-sub">Last Evaluation</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Three Column Profile Grid -->
+                        <div class="profile-three-col-grid margin-top">
+
+                            <!-- Column 1: Platform Activity -->
+                            <div class="profile-col platform-activity-col">
+                                <div class="card glass">
+                                    <div class="card-header justify-between">
+                                        <div class="flex-align">
+                                            <i data-lucide="activity" class="text-cyan"></i>
+                                            <div>
+                                                <h3>Platform Activity</h3>
+                                                <p class="card-subtext">Linked accounts & live metrics</p>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-primary btn-sm sync-pulse-btn" id="syncPlatformsBtn" title="Sync All Platforms and Award EXP">
+                                            <i data-lucide="refresh-cw"></i> Sync Platforms
+                                        </button>
+                                    </div>
+                                    <div class="card-body platform-cards-list">
+
+                                        <!-- LeetCode Platform Card -->
+                                        <div class="platform-item-box leetcode-box">
+                                            <div class="platform-item-header">
+                                                <div class="platform-brand">
+                                                    <span class="platform-badge-logo leetcode-badge-logo">LC</span>
+                                                    <span class="platform-name">LeetCode</span>
+                                                </div>
+                                                <div class="platform-handle-tag">
+                                                    <span id="displayLeetcodeUser">lakshyajhunjhunwala</span>
+                                                    <span id="lcVerifyStatus"><i data-lucide="check-circle-2" class="verified-icon"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="platform-chips-row">
+                                                <div class="p-chip"><span id="lcBadges">1</span> Badges</div>
+                                                <div class="p-chip"><span id="lcRank">1418643</span> Rank</div>
+                                                <div class="p-chip highlight-chip"><span id="lcSolved">120</span> Solved</div>
+                                            </div>
+                                            <div class="platform-reward-row">
+                                                <span class="exp-badge leetcode-exp">+1,250 EXP Earned</span>
+                                                <a href="https://leetcode.com" target="_blank" id="lcExternalLink" class="platform-ext-link"><i data-lucide="external-link"></i></a>
+                                            </div>
+                                        </div>
+
+                                        <!-- CodeChef Platform Card -->
+                                        <div class="platform-item-box codechef-box">
+                                            <div class="platform-item-header">
+                                                <div class="platform-brand">
+                                                    <span class="platform-badge-logo codechef-badge-logo">CC</span>
+                                                    <span class="platform-name">CodeChef</span>
+                                                </div>
+                                                <div class="platform-handle-tag">
+                                                    <span id="displayCodechefUser">glee_mount_91</span>
+                                                    <span id="ccVerifyStatus"><i data-lucide="check-circle-2" class="verified-icon"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="platform-chips-row">
+                                                <div class="p-chip"><span id="ccStars">1 Star(s)</span></div>
+                                                <div class="p-chip"><span id="ccRank">11961455</span> Global Rank</div>
+                                                <div class="p-chip highlight-chip"><span id="ccRating">1196</span> Rating</div>
+                                            </div>
+                                            <div class="platform-reward-row">
+                                                <span class="exp-badge codechef-exp">+100 EXP Earned</span>
+                                                <a href="https://codechef.com" target="_blank" id="ccExternalLink" class="platform-ext-link"><i data-lucide="external-link"></i></a>
+                                            </div>
+                                        </div>
+
+                                        <!-- Codeforces Platform Card -->
+                                        <div class="platform-item-box codeforces-box">
+                                            <div class="platform-item-header">
+                                                <div class="platform-brand">
+                                                    <span class="platform-badge-logo codeforces-badge-logo">CF</span>
+                                                    <span class="platform-name">Codeforces</span>
+                                                </div>
+                                                <div class="platform-handle-tag">
+                                                    <span id="displayCodeforcesUser">lakshya9830</span>
+                                                    <span id="cfVerifyStatus"><i data-lucide="check-circle-2" class="verified-icon"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="platform-chips-row">
+                                                <div class="p-chip"><span id="cfRating">0</span> Rating</div>
+                                                <div class="p-chip"><span id="cfRank">unrated</span></div>
+                                                <div class="p-chip highlight-chip"><span id="cfSolved">0</span> Solved</div>
+                                            </div>
+                                            <div class="platform-reward-row">
+                                                <span class="exp-badge codeforces-exp">+50 EXP Earned</span>
+                                                <a href="https://codeforces.com" target="_blank" id="cfExternalLink" class="platform-ext-link"><i data-lucide="external-link"></i></a>
+                                            </div>
+                                        </div>
+
+                                        <!-- GeeksforGeeks Platform Card -->
+                                        <div class="platform-item-box gfg-box">
+                                            <div class="platform-item-header">
+                                                <div class="platform-brand">
+                                                    <span class="platform-badge-logo gfg-badge-logo">GFG</span>
+                                                    <span class="platform-name">GeeksforGeeks</span>
+                                                </div>
+                                                <div class="platform-handle-tag">
+                                                    <span id="displayGfgUser">lakshyajhun3plt</span>
+                                                    <span id="gfgVerifyStatus"><i data-lucide="check-circle-2" class="verified-icon"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="platform-chips-row">
+                                                <div class="p-chip"><span id="gfgRank">37</span> Rank</div>
+                                                <div class="p-chip"><span id="gfgScore">66</span> Score</div>
+                                                <div class="p-chip highlight-chip"><span id="gfgSolved">47</span> Solved</div>
+                                            </div>
+                                            <div class="platform-reward-row">
+                                                <span class="exp-badge gfg-exp">+367 EXP Earned</span>
+                                                <a href="https://geeksforgeeks.org" target="_blank" id="gfgExternalLink" class="platform-ext-link"><i data-lucide="external-link"></i></a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Column 2: Activity Heatmap Calendar -->
+                            <div class="profile-col calendar-col">
+                                <div class="card glass">
+                                    <div class="card-header justify-between">
+                                        <div class="flex-align">
+                                            <i data-lucide="calendar" class="text-cyan"></i>
+                                            <div>
+                                                <h3 id="profileCalendarMonthTitle">September 2026 Activity</h3>
+                                                <p class="card-subtext">Monthly problem solving frequency</p>
+                                            </div>
+                                        </div>
+                                        <span class="pulse-icon green" title="Tracking Live"></span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="calendar-heat-wrapper">
+                                            <div class="calendar-weekdays-header">
+                                                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                                            </div>
+                                            <div class="calendar-heat-grid" id="profileCalendarHeatGrid">
+                                                <!-- Populated dynamically via JS -->
+                                            </div>
+                                            <div class="calendar-legend-row">
+                                                <span class="legend-label">Less</span>
+                                                <div class="legend-cells">
+                                                    <span class="heat-cell heat-lvl-0"></span>
+                                                    <span class="heat-cell heat-lvl-1"></span>
+                                                    <span class="heat-cell heat-lvl-2"></span>
+                                                    <span class="heat-cell heat-lvl-3"></span>
+                                                </div>
+                                                <span class="legend-label">More</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="calendar-bottom-stats margin-top">
+                                            <div class="c-stat-box">
+                                                <span class="c-stat-num" id="profileCalMaxSolved">2</span>
+                                                <span class="c-stat-lbl">Max Solved (Day)</span>
+                                            </div>
+                                            <div class="c-stat-box">
+                                                <span class="c-stat-num text-orange" id="profileCalDayStreak">3</span>
+                                                <span class="c-stat-lbl">Day Streak</span>
+                                            </div>
+                                            <div class="c-stat-box">
+                                                <span class="c-stat-num" id="profileCalAvgSolved">0.29</span>
+                                                <span class="c-stat-lbl">Avg / Day</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Column 3: Achievements & Announcements -->
+                            <div class="profile-col achievements-announcements-col">
+                                <!-- Achievements Card -->
+                                <div class="card glass">
+                                    <div class="card-header justify-between">
+                                        <div class="flex-align">
+                                            <i data-lucide="award" class="text-yellow"></i>
+                                            <h3>Achievements</h3>
+                                        </div>
+                                        <span class="badge-growth-chip emerald-chip" id="achievementsCountBadge">4 Unlocked</span>
+                                    </div>
+                                    <div class="card-body achievements-list" id="profileAchievementsList">
+                                        <div class="achievement-badge-card unlocked">
+                                            <div class="badge-icon-wrap gold">
+                                                <i data-lucide="crown"></i>
+                                            </div>
+                                            <div class="badge-content">
+                                                <h4>Century Coder</h4>
+                                                <p>Solved over 100 competitive problems across linked platforms.</p>
+                                            </div>
+                                        </div>
+                                        <div class="achievement-badge-card unlocked">
+                                            <div class="badge-icon-wrap cyan">
+                                                <i data-lucide="zap"></i>
+                                            </div>
+                                            <div class="badge-content">
+                                                <h4>Quad Polyglot</h4>
+                                                <p>Linked LeetCode, CodeChef, Codeforces and GeeksforGeeks.</p>
+                                            </div>
+                                        </div>
+                                        <div class="achievement-badge-card unlocked">
+                                            <div class="badge-icon-wrap orange">
+                                                <i data-lucide="flame"></i>
+                                            </div>
+                                            <div class="badge-content">
+                                                <h4>Streak Guardian</h4>
+                                                <p>Maintained consistent daily streak for consecutive challenges.</p>
+                                            </div>
+                                        </div>
+                                        <div class="achievement-badge-card unlocked">
+                                            <div class="badge-icon-wrap purple">
+                                                <i data-lucide="shield-check"></i>
+                                            </div>
+                                            <div class="badge-content">
+                                                <h4>Security Sentinel</h4>
+                                                <p>Verified Administrative Security Access Level.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Announcements Card -->
+                                <div class="card glass margin-top">
+                                    <div class="card-header justify-between">
+                                        <div class="flex-align">
+                                            <i data-lucide="megaphone" class="text-cyan"></i>
+                                            <h3>Announcements</h3>
+                                        </div>
+                                        <button class="btn btn-secondary btn-xs" id="openAddAnnouncementBtn" style="display: none;">
+                                            <i data-lucide="plus"></i> Add
+                                        </button>
+                                    </div>
+                                    <div class="card-body announcements-feed" id="profileAnnouncementsList">
+                                        <!-- Populated dynamically via JS -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- 3. QUIZZES & GAMES VIEW -->
+                <section id="view-quizzes" class="page-view">
+                    <div class="quizzes-container">
+                        
+                        <!-- Language Selection View -->
+                        <div id="quizCategorySelector" class="quiz-select-screen">
+                            <div class="section-header-srm text-center">
+                                <h2 class="section-title-srm">Practice <span class="gradient-text">Decks</span></h2>
+                                <p class="section-desc-srm">Solve. Learn. Repeat. Your coding journey starts here! Click a deck to begin the timed quiz.</p>
+                            </div>
+                            
+                            <div class="grid grid-3 category-grid margin-top">
+                                <button class="category-card-srm glass" data-lang="JavaScript">
+                                    <div class="practice-card-header">
+                                        <div class="platform-mini-icons">
+                                            <span class="mini-icon leetcode">L</span>
+                                            <span class="mini-icon geeksforgeeks">G</span>
+                                        </div>
+                                        <span class="practice-tag-srm">Heap / Priority Queue</span>
+                                    </div>
+                                    <h4>JavaScript Programming</h4>
+                                    <p>Asynchronous operations, closures, DOM manipulation, and dynamic prototype structures.</p>
+                                    <div class="practice-card-footer">
+                                        <span><i data-lucide="book-open" style="width:12px; display:inline-block; vertical-align:middle;"></i> 15 Problems</span>
+                                        <span class="arrow-indicator"><i data-lucide="chevron-right"></i></span>
+                                    </div>
+                                </button>
+
+                                <button class="category-card-srm glass" data-lang="Python">
+                                    <div class="practice-card-header">
+                                        <div class="platform-mini-icons">
+                                            <span class="mini-icon leetcode">L</span>
+                                            <span class="mini-icon geeksforgeeks">G</span>
+                                            <span class="mini-icon codeforces">C</span>
+                                        </div>
+                                        <span class="practice-tag-srm">Backtracking</span>
+                                    </div>
+                                    <h4>Python Core & Algorithms</h4>
+                                    <p>OOP classes, list comprehensions, dynamic decorators, and recursive search pathways.</p>
+                                    <div class="practice-card-footer">
+                                        <span><i data-lucide="book-open" style="width:12px; display:inline-block; vertical-align:middle;"></i> 20 Problems</span>
+                                        <span class="arrow-indicator"><i data-lucide="chevron-right"></i></span>
+                                    </div>
+                                </button>
+
+                                <button class="category-card-srm glass" data-lang="Java">
+                                    <div class="practice-card-header">
+                                        <div class="platform-mini-icons">
+                                            <span class="mini-icon leetcode">L</span>
+                                            <span class="mini-icon geeksforgeeks">G</span>
+                                        </div>
+                                        <span class="practice-tag-srm">Strings / Arrays</span>
+                                    </div>
+                                    <h4>Java Object-Oriented</h4>
+                                    <p>Functional streams, multi-threaded pipelines, core inheritance, and hash mappings.</p>
+                                    <div class="practice-card-footer">
+                                        <span><i data-lucide="book-open" style="width:12px; display:inline-block; vertical-align:middle;"></i> 15 Problems</span>
+                                        <span class="arrow-indicator"><i data-lucide="chevron-right"></i></span>
+                                    </div>
+                                </button>
+
+                                <button class="category-card-srm glass" data-lang="C++">
+                                    <div class="practice-card-header">
+                                        <div class="platform-mini-icons">
+                                            <span class="mini-icon leetcode">L</span>
+                                            <span class="mini-icon codeforces">C</span>
+                                        </div>
+                                        <span class="practice-tag-srm">Dynamic Memory</span>
+                                    </div>
+                                    <h4>C++ Memory & STL</h4>
+                                    <p>Pointer arithmetic, double-end queues, vector STL buffers, and low-level allocations.</p>
+                                    <div class="practice-card-footer">
+                                        <span><i data-lucide="book-open" style="width:12px; display:inline-block; vertical-align:middle;"></i> 20 Problems</span>
+                                        <span class="arrow-indicator"><i data-lucide="chevron-right"></i></span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Active Quiz Screen -->
+                        <div id="activeQuizScreen" class="quiz-active-screen glass hidden">
+                            <div class="quiz-header">
+                                <div class="quiz-meta-info">
+                                    <span class="quiz-language-badge" id="activeQuizLang">JavaScript</span>
+                                    <span class="quiz-progress-text">Question <span id="quizIndexVal">1</span> of <span id="quizTotalVal">5</span></span>
+                                </div>
+                                <button class="btn btn-secondary btn-sm" id="quitQuizBtn">Quit</button>
+                            </div>
+                            
+                            <div class="timer-bar-bg">
+                                <div class="timer-bar-fill" id="quizTimerBar"></div>
+                            </div>
+
+                            <div class="question-box">
+                                <h3 id="quizQuestionText">Loading Question...</h3>
+                            </div>
+
+                            <div class="options-grid">
+                                <button class="option-btn" data-option="A">
+                                    <span class="option-prefix">A</span>
+                                    <span class="option-text" id="optionAText">Option A</span>
+                                </button>
+                                <button class="option-btn" data-option="B">
+                                    <span class="option-prefix">B</span>
+                                    <span class="option-text" id="optionBText">Option B</span>
+                                </button>
+                                <button class="option-btn" data-option="C">
+                                    <span class="option-prefix">C</span>
+                                    <span class="option-text" id="optionCText">Option C</span>
+                                </button>
+                                <button class="option-btn" data-option="D">
+                                    <span class="option-prefix">D</span>
+                                    <span class="option-text" id="optionDText">Option D</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Completion Screen -->
+                        <div id="quizResultScreen" class="quiz-result-screen glass text-center hidden">
+                            <div class="result-icon-wrapper">
+                                <i data-lucide="party-popper" class="popper-icon"></i>
+                            </div>
+                            <h2>Quiz Completed!</h2>
+                            <p class="quiz-result-desc">You successfully tackled the challenge. Here are your rewards:</p>
+                            
+                            <div class="reward-row">
+                                <div class="reward-item glass">
+                                    <span class="reward-title">Correct Answers</span>
+                                    <span class="reward-val" id="resultCorrectCount">0</span>
+                                </div>
+                                <div class="reward-item glass">
+                                    <span class="reward-title">XP Earned</span>
+                                    <span class="reward-val highlight" id="resultXPEarned">+0 XP</span>
+                                </div>
+                                <div class="reward-item glass">
+                                    <span class="reward-title">New Streak</span>
+                                    <span class="reward-val" id="resultStreakCount">0 Days</span>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" id="finishQuizBtn">Return to Selector</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. PROJECTS & COLLABORATION VIEW -->
+                <section id="view-projects" class="page-view">
+                    <div class="section-actions justify-between margin-bottom">
+                        <p class="section-sub-desc">Browse projects being built by club members, join dynamic teams, or propose your own application ideas.</p>
+                        <button class="btn btn-primary" id="openProposeProjectModalBtn">
+                            <i data-lucide="plus-circle"></i> Propose Project
+                        </button>
+                    </div>
+
+                    <!-- Project List Cards -->
+                    <div class="grid grid-3" id="projectsGrid">
+                        <!-- Dynamically populated from REST API -->
+                </section>
+
+                <!-- 4. LEARNING HUB (RESOURCES) VIEW -->
+                <section id="view-resources" class="page-view">
+                    <div class="resources-view-header text-center">
+                        <h2 class="section-title-srm">Resources</h2>
+                        <p class="section-desc-srm">The Best Minds Learn from the Best Resources.</p>
+                        
+                        <!-- Search and Action Controls -->
+                        <div class="resources-controls margin-top">
+                            <div class="resource-search-box">
+                                <div class="input-with-icon">
+                                    <i data-lucide="search"></i>
+                                    <input type="text" id="resourceSearchInput" placeholder="Search resources...">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="alert('Proposal tool proposed! Submitting to SRM Technical Chapter Lead...')">
+                                <i data-lucide="plus" style="width:14px; display:inline-block; vertical-align:middle; margin-right:4px;"></i> Create Resource
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Category Cards Grid -->
+                    <div class="grid grid-3 margin-top" id="resourcesGrid">
+                        <!-- Web Development -->
+                        <div class="resource-card-srm glass" onclick="openVideoModal('https://www.youtube.com/embed/Ke90Tje7VS0', 'Web Development Fundamentals')">
+                            <div class="res-card-body">
+                                <h4>Web Development</h4>
+                                <p>Web development involves building and maintaining websites using front-end (HTML, CSS, JavaScript), back-end servers, and database integration layers.</p>
+                            </div>
+                            <div class="res-card-footer">
+                                <span class="res-badge-videos"><i data-lucide="video" style="width:12px; display:inline-block; vertical-align:middle; margin-right:4px;"></i> 7 Videos</span>
+                                <span class="res-date">3/31/2025</span>
+                            </div>
+                        </div>
+
+                        <!-- Python -->
+                        <div class="resource-card-srm glass" onclick="openVideoModal('https://www.youtube.com/embed/rfscVS0vtbw', 'Python Core & Web Scraping')">
+                            <div class="res-card-body">
+                                <h4>Python Scripting</h4>
+                                <p>An ultimate programming language which will help you in working in wide range of fields be it automation, scripting, data scraping, or APIs.</p>
+                            </div>
+                            <div class="res-card-footer">
+                                <span class="res-badge-videos"><i data-lucide="video" style="width:12px; display:inline-block; vertical-align:middle; margin-right:4px;"></i> 4 Videos</span>
+                                <span class="res-date">4/1/2025</span>
+                            </div>
+                        </div>
+
+                        <!-- Canva -->
+                        <div class="resource-card-srm glass" onclick="openVideoModal('https://www.youtube.com/embed/Ke90Tje7VS0', 'Graphic Design with Canva')">
+                            <div class="res-card-body">
+                                <h4>Canva Graphic Design</h4>
+                                <p>Canva is a platform used widely for Graphics designing, editing, presentations, and logo mockups. Excellent for branding and seminar decks.</p>
+                            </div>
+                            <div class="res-card-footer">
+                                <span class="res-badge-videos"><i data-lucide="video" style="width:12px; display:inline-block; vertical-align:middle; margin-right:4px;"></i> 3 Videos</span>
+                                <span class="res-date">4/5/2025</span>
+                            </div>
+                        </div>
+
+                        <!-- Data Science -->
+                        <div class="resource-card-srm glass" onclick="openVideoModal('https://www.youtube.com/embed/ua-CiDNNj30', 'Data Science & Visualizations')">
+                            <div class="res-card-body">
+                                <h4>Data Science</h4>
+                                <p>Explore top curated resources to kickstart or advance your journey in Data Science. Learn pandas, numpy arrays, and data charting models.</p>
+                            </div>
+                            <div class="res-card-footer">
+                                <span class="res-badge-videos"><i data-lucide="video" style="width:12px; display:inline-block; vertical-align:middle; margin-right:4px;"></i> 4 Videos</span>
+                                <span class="res-date">5/30/2025</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. SECURITY CENTER VIEW -->
+                <section id="view-security" class="page-view">
+
+                    <!-- Member Admission & Access Governance Control Panel -->
+                    <div class="card glass margin-bottom admin-admission-card">
+                        <div class="card-header justify-between">
+                            <div class="flex-align">
+                                <i data-lucide="users" class="text-cyan"></i>
+                                <div>
+                                    <h3>Member Admission & Access Governance</h3>
+                                    <p class="card-subtext">Review new student registration applications, approve membership, or remove applicants.</p>
+                                </div>
+                            </div>
+                            <div class="flex-align gap-2">
+                                <span class="badge-growth-chip cyan-chip" id="pendingApplicantsCountBadge">0 Pending</span>
+                                <button class="btn btn-icon btn-sm" id="refreshPendingMembersBtn" title="Refresh Applications">
+                                    <i data-lucide="rotate-cw"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="pending-members-table-container">
+                                <table class="leaderboard-table srm-styled pending-table" id="pendingMembersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Applicant</th>
+                                            <th>Email</th>
+                                            <th>Academic Year</th>
+                                            <th>Bio / Statement</th>
+                                            <th>Applied</th>
+                                            <th>Governance Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pendingMembersList">
+                                        <!-- Loaded dynamically via app.js -->
+                                    </tbody>
+                                </table>
+                                <div id="noPendingMembersMsg" class="empty-state-notice hidden">
+                                    <i data-lucide="check-circle" class="text-emerald"></i>
+                                    <p>All membership applications have been reviewed! No pending approvals.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dynamic Grid containing requested SECURITY layers -->
+                    <div class="security-dashboard-grid">
+                        
+                        <!-- Top left: System health & control toggles -->
+                        <div class="sec-column-left flex-col gap-4">
+                            
+                            <!-- Platform Security Component -->
+                            <div class="card glass">
+                                <div class="card-header justify-between">
+                                    <div class="flex-align">
+                                        <i data-lucide="server"></i>
+                                        <h3>Platform Security</h3>
+                                    </div>
+                                    <span class="status-indicator-badge green" id="platformStatusIndicator">SECURE</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="metric-row">
+                                        <span>Core Firewall Shield</span>
+                                        <span class="metric-value font-bold green" id="firewallText">ACTIVE</span>
+                                    </div>
+                                    <div class="metric-row">
+                                        <span>SSL Handshake Protection</span>
+                                        <span class="metric-value green">VERIFIED (TLSv1.3)</span>
+                                    </div>
+                                    <div class="toggle-group margin-top">
+                                        <button class="btn btn-secondary btn-sm" id="toggleFirewallBtn">Toggle Firewall</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Application Protection Component -->
+                            <div class="card glass">
+                                <div class="card-header justify-between">
+                                    <div class="flex-align">
+                                        <i data-lucide="fingerprint"></i>
+                                        <h3>Application Protection</h3>
+                                    </div>
+                                    <span class="status-indicator-badge green" id="appStatusIndicator">SHIELDED</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="metric-row">
+                                        <span>SQL Injection & XSS Guard</span>
+                                        <span class="metric-value font-bold green" id="appShieldText">ACTIVE</span>
+                                    </div>
+                                    <div class="metric-row">
+                                        <span>Dependency Vulnerability Audit</span>
+                                        <span class="metric-value green">0 THREATS</span>
+                                    </div>
+                                    <div class="toggle-group margin-top">
+                                        <button class="btn btn-secondary btn-sm" id="toggleAppShieldBtn">Toggle Injection Shield</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Network Protection Component -->
+                            <div class="card glass">
+                                <div class="card-header justify-between">
+                                    <div class="flex-align">
+                                        <i data-lucide="shield-alert"></i>
+                                        <h3>Network Protection</h3>
+                                    </div>
+                                    <span class="status-indicator-badge green" id="networkStatusIndicator">MITIGATING</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="metric-row">
+                                        <span>DDoS Mitigation Scrubbing</span>
+                                        <span class="metric-value font-bold green" id="ddosText">ENABLED</span>
+                                    </div>
+                                    <div class="metric-row">
+                                        <span>Blocked Brute Force IPs</span>
+                                        <span class="metric-value amber" id="blockedIpsText">432 IPs</span>
+                                    </div>
+                                    <div class="toggle-group margin-top">
+                                        <button class="btn btn-secondary btn-sm" id="toggleDdosBtn">Toggle DDoS Shield</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Access Control Component -->
+                            <div class="card glass">
+                                <div class="card-header">
+                                    <i data-lucide="key"></i>
+                                    <h3>Access Control & Audit</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="metric-row">
+                                        <span>Security Role Matrix</span>
+                                        <span class="metric-value font-mono">RBAC_ENFORCED</span>
+                                    </div>
+                                    <div class="metric-row">
+                                        <span>Active Portal Sessions</span>
+                                        <span class="metric-value green" id="activeSessionsText">12 Sessions</span>
+                                    </div>
+                                    <div class="permissions-matrix margin-top">
+                                        <div class="role-matrix-item"><span>Admin:</span> <span class="text-xs">Full Permissions (R/W/D)</span></div>
+                                        <div class="role-matrix-item"><span>Tech Lead:</span> <span class="text-xs">Manage Quizzes, Projects (R/W)</span></div>
+                                        <div class="role-matrix-item"><span>Student:</span> <span class="text-xs">Solve, Apply, Sync (R)</span></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Top right: Monitoring charts & Recovery -->
+                        <div class="sec-column-right flex-col gap-4">
+                            
+                            <!-- System Performance Monitoring -->
+                            <div class="card glass">
+                                <div class="card-header">
+                                    <i data-lucide="activity"></i>
+                                    <h3>System Performance Monitoring</h3>
+                                </div>
+                                <div class="card-body">
+                                    <!-- CPU Load Widget -->
+                                    <div class="performance-bar-widget">
+                                        <div class="widget-label">
+                                            <span>CPU Server Load</span>
+                                            <span id="cpuUsageVal">24%</span>
+                                        </div>
+                                        <div class="bar-container">
+                                            <div class="bar-fill blue" id="cpuBarFill" style="width: 24%;"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- RAM Load Widget -->
+                                    <div class="performance-bar-widget margin-top">
+                                        <div class="widget-label">
+                                            <span>RAM Memory Allocation</span>
+                                            <span id="ramUsageVal">56%</span>
+                                        </div>
+                                        <div class="bar-container">
+                                            <div class="bar-fill purple" id="ramBarFill" style="width: 56%;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="monitoring-alert green margin-top" id="systemHealthText">
+                                        <i data-lucide="check-circle-2"></i> Core systems reporting HEALTHY (0 latency drops).
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- System Recovery Simulator -->
+                            <div class="card glass">
+                                <div class="card-header">
+                                    <i data-lucide="refresh-cw"></i>
+                                    <h3>Monitoring & Recovery Actions</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-description">Trigger manual backups or deploy hot-swaps to recover database states in case of unexpected exceptions.</p>
+                                    
+                                    <div class="recovery-action-buttons">
+                                        <button class="btn btn-secondary w-full" id="triggerBackupBtn">
+                                            <i data-lucide="save"></i> Trigger System Backup
+                                        </button>
+                                        <button class="btn btn-danger w-full margin-top" id="triggerRestoreBtn">
+                                            <i data-lucide="rotate-ccw"></i> Perform Emergency Restore
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Live Security Console logs -->
+                            <div class="card glass console-card">
+                                <div class="card-header justify-between">
+                                    <div class="flex-align">
+                                        <i data-lucide="terminal"></i>
+                                        <h3 class="font-mono">Security Operations Center Console</h3>
+                                    </div>
+                                    <span class="pulse-icon green" title="Console listening"></span>
+                                </div>
+                                <div class="card-body console-body font-mono scroll-y" id="securityConsoleLogs">
+                                    <!-- Logs populated dynamically from database -->
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- 6. DEDICATED LEADERBOARD VIEW -->
+                <section id="view-leaderboard" class="page-view">
+                    <div class="leaderboard-view-container">
+                        <div class="section-header-srm text-center">
+                            <h2 class="section-title-srm">Dynamic <span class="gradient-text">Leaderboards</span></h2>
+                            <p class="section-desc-srm">Engage in healthy competition with real-time individual and team rankings.</p>
+                        </div>
+                        
+                        <!-- Tabs Navigation -->
+                        <div class="leaderboard-tabs-container margin-top">
+                            <div class="leaderboard-tabs-srm">
+                                <span class="lead-tab active" data-tab="overall">Overall</span>
+                                <span class="lead-tab" data-tab="platforms">Platforms <i data-lucide="chevron-down" style="width:12px; display:inline-block; vertical-align:middle;"></i></span>
+                                <span class="lead-tab" data-tab="stats">Stats</span>
+                            </div>
+                            <div class="leaderboard-search">
+                                <div class="input-with-icon">
+                                    <i data-lucide="search"></i>
+                                    <input type="text" id="leaderboardSearchInput" placeholder="Search users...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top 3 Performers Pedestal (Gold, Silver, Bronze) -->
+                        <div class="leaderboard-podium-cards margin-top" id="leaderboardPodiumCards">
+                            <!-- Generated dynamically by app.js -->
+                        </div>
+
+                        <!-- Leaderboard Table -->
+                        <div class="card glass margin-top text-left">
+                            <div class="card-header justify-between">
+                                <div class="flex-align">
+                                    <i data-lucide="list"></i>
+                                    <h3>Overall Chapter Standings</h3>
+                                </div>
+                                <span class="leaderboard-status-badge">5 Days Left</span>
+                            </div>
+                            <div class="card-body">
+                                <table class="leaderboard-table srm-styled">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Student</th>
+                                            <th>XP Points</th>
+                                            <th>Active Streak</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="leaderboardFullList">
+                                        <!-- Dynamically generated list from backend -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+    </div>
+
+    <!-- MOCK LOGIN MODAL OVERLAY (SPLIT-SCREEN DESIGN) -->
+    <div id="loginModal" class="modal-overlay hidden">
+        <div class="login-split-container glass">
+            <!-- Left Side: Brand Showcase -->
+            <div class="login-split-left">
+                <img src="logo.png" alt="MEDSTELLAR Logo" class="logo-icon-srm-large">
+                
+                <h2>Welcome to MEDSTELLAR</h2>
+                <p>Join our premier community of passionate developers and tech innovators. Access exclusive resources, events, and collaborate with fellow members.</p>
+                
+                <div class="login-left-badges">
+                    <div class="login-left-badge"><i data-lucide="terminal"></i> Coding Arenas</div>
+                    <div class="login-left-badge"><i data-lucide="cpu"></i> Innovation & Build</div>
+                </div>
+            </div>
+            
+            <!-- Right Side: Login Form -->
+            <div class="login-split-right">
+                <div class="login-split-header">
+                    <button class="btn btn-icon btn-sm" id="closeLoginModalBtn" onclick="hideLoginModal()"><i data-lucide="x"></i></button>
+                </div>
+                
+                <div class="login-form-wrapper">
+                    <h3>Welcome Back!</h3>
+                    <p>Please sign in to continue</p>
+                    
+                    <form id="loginForm" class="login-form margin-top">
+                        <div class="form-group text-left">
+                            <label for="loginEmailInput"><i data-lucide="user" style="width:14px; display:inline-block; margin-right:4px;"></i> Email or Username</label>
+                            <input type="text" id="loginEmailInput" required placeholder="e.g. lakshya@college.edu or Lakshya" autocomplete="username">
+                        </div>
+                        <div class="form-group text-left">
+                            <label for="loginPasswordInput"><i data-lucide="lock" style="width:14px; display:inline-block; margin-right:4px;"></i> Password</label>
+                            <input type="password" id="loginPasswordInput" required placeholder="Enter your password" autocomplete="current-password">
+                        </div>
+                        
+                        <div class="form-options text-left">
+                            <label class="checkbox-container">
+                                <input type="checkbox" checked> Remember me
+                            </label>
+                            <a href="#" class="forgot-link">Forgot password?</a>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-full margin-top">
+                            Authenticate & Enter
+                        </button>
+                    </form>
+                    
+                    <p class="signup-note-srm">Don't have an account? <span class="highlight" id="openSignupFromLoginBtn" onclick="showSignupModal()" style="cursor: pointer; text-decoration: underline;">Sign up</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOCK SIGN UP MODAL OVERLAY (SPLIT-SCREEN DESIGN) -->
+    <div id="signupModal" class="modal-overlay hidden">
+        <div class="login-split-container glass signup-split-container">
+            <!-- Left Side: Brand Showcase -->
+            <div class="login-split-left">
+                <img src="logo.png" alt="MEDSTELLAR Logo" class="logo-icon-srm-large">
+                
+                <h2>Join MEDSTELLAR</h2>
+                <p>Apply for membership in SRM's premier student developer community. Build real products, connect external coding profiles, earn XP, and level up with fellow developers.</p>
+                
+                <div class="login-left-badges">
+                    <div class="login-left-badge"><i data-lucide="shield-check"></i> Admin Admission Review</div>
+                    <div class="login-left-badge"><i data-lucide="award"></i> Profile EXP & Ranking</div>
+                </div>
+            </div>
+            
+            <!-- Right Side: Sign Up Form -->
+            <div class="login-split-right">
+                <div class="login-split-header">
+                    <button class="btn btn-icon btn-sm" id="closeSignupModalBtn" onclick="hideSignupModal()"><i data-lucide="x"></i></button>
+                </div>
+                
+                <div class="login-form-wrapper">
+                    <h3>Create Member Account</h3>
+                    <p>Submit your details for club admission approval</p>
+                    
+                    <form id="signupForm" class="login-form margin-top">
+                        <div class="form-group text-left">
+                            <label for="signupFullName"><i data-lucide="user" style="width:14px; display:inline-block; margin-right:4px;"></i> Full Name</label>
+                            <input type="text" id="signupFullName" required placeholder="e.g. Saksham Gupta">
+                        </div>
+
+                        <div class="form-group text-left">
+                            <label for="signupEmail"><i data-lucide="mail" style="width:14px; display:inline-block; margin-right:4px;"></i> College / Personal Email</label>
+                            <input type="email" id="signupEmail" required placeholder="e.g. saksham@srmist.edu.in" autocomplete="email">
+                        </div>
+
+                        <div class="form-row-2">
+                            <div class="form-group text-left">
+                                <label for="signupPassword"><i data-lucide="lock" style="width:14px; display:inline-block; margin-right:4px;"></i> Password</label>
+                                <input type="password" id="signupPassword" required minlength="4" placeholder="Min 4 chars" autocomplete="new-password">
+                            </div>
+                            <div class="form-group text-left">
+                                <label for="signupAcademicYear"><i data-lucide="graduation-cap" style="width:14px; display:inline-block; margin-right:4px;"></i> Year of Study</label>
+                                <select id="signupAcademicYear">
+                                    <option value="1st Year">1st Year</option>
+                                    <option value="2nd Year" selected>2nd Year</option>
+                                    <option value="3rd Year">3rd Year</option>
+                                    <option value="4th Year">4th Year</option>
+                                    <option value="Alumni">Alumni</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-left">
+                            <label for="signupBio"><i data-lucide="file-text" style="width:14px; display:inline-block; margin-right:4px;"></i> Bio / Coding Interests</label>
+                            <textarea id="signupBio" rows="2" placeholder="e.g. Competitive programmer passionate about C++, Web Dev & AI..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-full margin-top" id="submitSignupBtn">
+                            Submit Application for Review
+                        </button>
+                    </form>
+                    
+                    <p class="signup-note-srm">Already have an account? <span class="highlight" id="openLoginFromSignupBtn" style="cursor: pointer; text-decoration: underline;">Log in</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOCK PROPOSE PROJECT MODAL -->
+    <div id="proposeProjectModal" class="modal-overlay hidden">
+        <div class="modal-card glass">
+            <div class="modal-header justify-between">
+                <h3>Propose New Project</h3>
+                <button class="btn btn-icon btn-sm" id="closeProposeModalBtn"><i data-lucide="x"></i></button>
+            </div>
+            <form id="proposeProjectForm" class="margin-top">
+                <div class="form-group">
+                    <label for="newProjName">Project Title</label>
+                    <input type="text" id="newProjName" required placeholder="e.g. Campus Carpool App">
+                </div>
+                <div class="form-group">
+                    <label for="newProjDesc">Description</label>
+                    <textarea id="newProjDesc" required placeholder="Describe the application goals, frontend/backend architecture, and target audience..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="newProjGithub">GitHub Repository Link</label>
+                    <input type="url" id="newProjGithub" placeholder="https://github.com/medstellar/project-repo">
+                </div>
+                <button type="submit" class="btn btn-primary w-full margin-top">
+                    Submit Proposal
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MOCK VIDEO MODAL -->
+    <div id="videoModal" class="modal-overlay hidden">
+        <div class="modal-card glass video-modal-card">
+            <div class="modal-header justify-between">
+                <h4 id="videoModalTitle">Video Manual</h4>
+                <button class="btn btn-icon btn-sm" id="closeVideoModalBtn"><i data-lucide="x"></i></button>
+            </div>
+            <div class="video-wrapper">
+                <iframe id="videoIframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT PROFILE & PLATFORMS MODAL -->
+    <div id="editProfileModal" class="modal-overlay hidden">
+        <div class="modal-card glass edit-profile-card">
+            <div class="modal-header justify-between">
+                <div class="flex-align">
+                    <i data-lucide="user-cog" class="text-cyan"></i>
+                    <h3>Edit Profile & Connected Accounts</h3>
+                </div>
+                <button class="btn btn-icon btn-sm" id="closeEditProfileModalBtn"><i data-lucide="x"></i></button>
+            </div>
+            <form id="editProfileForm" class="margin-top">
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="inputFullName">Full Name</label>
+                        <input type="text" id="inputFullName" required placeholder="e.g. Lakshya Jhunjhunwala">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputAcademicYear">Academic Year</label>
+                        <select id="inputAcademicYear">
+                            <option value="1st Year">1st Year</option>
+                            <option value="2nd Year" selected>2nd Year</option>
+                            <option value="3rd Year">3rd Year</option>
+                            <option value="4th Year">4th Year</option>
+                            <option value="Alumni">Alumni</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="inputStatusEmoji">Status Emoji</label>
+                        <input type="text" id="inputStatusEmoji" maxlength="4" placeholder="🤩">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputBio">Bio / Status</label>
+                        <input type="text" id="inputBio" placeholder="Building MEDSTELLAR">
+                    </div>
+                </div>
+
+                <h4 class="form-section-divider">Platform Handles</h4>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="inputLeetcodeHandle"><span class="leetcode-mini-tag">⚡</span> LeetCode Handle</label>
+                        <input type="text" id="inputLeetcodeHandle" placeholder="e.g. lakshyajhunjhunwala">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputCodechefHandle"><span class="codechef-mini-tag">👨‍🍳</span> CodeChef Handle</label>
+                        <input type="text" id="inputCodechefHandle" placeholder="e.g. glee_mount_91">
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="inputCodeforcesHandle"><span class="codeforces-mini-tag">⚔️</span> Codeforces Handle</label>
+                        <input type="text" id="inputCodeforcesHandle" placeholder="e.g. lakshya9830">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputGfgHandle"><span class="gfg-mini-tag">💻</span> GeeksforGeeks Handle</label>
+                        <input type="text" id="inputGfgHandle" placeholder="e.g. lakshyajhun3plt">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputGithubHandle"><i data-lucide="github" style="width:14px; display:inline-block;"></i> GitHub Username</label>
+                    <input type="text" id="inputGithubHandle" placeholder="e.g. lakshya-codes">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full margin-top">
+                    Save Changes & Sync EXP
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- NEW ANNOUNCEMENT MODAL -->
+    <div id="announcementModal" class="modal-overlay hidden">
+        <div class="modal-card glass">
+            <div class="modal-header justify-between">
+                <div class="flex-align">
+                    <i data-lucide="megaphone" class="text-cyan"></i>
+                    <h3>Publish Club Announcement</h3>
+                </div>
+                <button class="btn btn-icon btn-sm" id="closeAnnouncementModalBtn"><i data-lucide="x"></i></button>
+            </div>
+            <form id="newAnnouncementForm" class="margin-top">
+                <div class="form-group">
+                    <label for="newAnnounceTitle">Title</label>
+                    <input type="text" id="newAnnounceTitle" required placeholder="e.g. Monthly Coding Sprint Started">
+                </div>
+                <div class="form-group">
+                    <label for="newAnnounceTag">Tag / Priority</label>
+                    <select id="newAnnounceTag">
+                        <option value="PINNED">PINNED</option>
+                        <option value="EVENT">EVENT</option>
+                        <option value="SECURITY">SECURITY</option>
+                        <option value="ANNOUNCEMENT" selected>ANNOUNCEMENT</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="newAnnounceContent">Message Content</label>
+                    <textarea id="newAnnounceContent" rows="4" required placeholder="Write the announcement details for members..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-full margin-top">
+                    Publish Bulletin
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PLATFORM OWNERSHIP VERIFICATION MODAL -->
+    <div id="verifyPlatformModal" class="modal-overlay hidden">
+        <div class="modal-card glass verify-modal-card">
+            <div class="modal-header justify-between">
+                <div class="flex-align">
+                    <span id="verifyModalPlatformIcon" class="platform-badge-logo leetcode-badge-logo">LC</span>
+                    <div>
+                        <h3 id="verifyModalTitle">Verify LeetCode Ownership</h3>
+                        <p class="card-subtext" id="verifyModalSubtitle">Confirm handle @username</p>
+                    </div>
+                </div>
+                <button class="btn btn-icon btn-sm" id="closeVerifyModalBtn"><i data-lucide="x"></i></button>
+            </div>
+
+            <div class="verify-steps-container margin-top">
+                <!-- Step 1: Copy Token -->
+                <div class="verify-step-card">
+                    <div class="step-badge">1</div>
+                    <div class="step-content">
+                        <h4>Copy your unique verification token</h4>
+                        <p>This cryptographically signed code proves ownership of your external coding profile.</p>
+                        <div class="verify-token-box margin-top-xs">
+                            <span class="token-code" id="verifyTokenDisplay">MS-XXXX</span>
+                            <button type="button" class="btn btn-secondary btn-xs copy-token-btn" id="copyTokenBtn">
+                                <i data-lucide="copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Paste in Bio -->
+                <div class="verify-step-card">
+                    <div class="step-badge">2</div>
+                    <div class="step-content">
+                        <h4>Paste the token into your profile bio</h4>
+                        <p id="verifyStepInstructions">Open your platform settings and paste this code anywhere inside your <strong>Bio / Summary / About Me</strong>, then save your changes on that platform.</p>
+                        <a href="#" target="_blank" id="verifyPlatformDirectLink" class="direct-settings-link">
+                            <i data-lucide="external-link"></i> Open Profile Settings
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Step 3: Scan & Confirm -->
+                <div class="verify-step-card">
+                    <div class="step-badge">3</div>
+                    <div class="step-content">
+                        <h4>Scan bio & claim your Verified Badge</h4>
+                        <p>Our verification engine will inspect your public profile bio, confirm ownership, and award <strong>+100 EXP</strong>!</p>
+                        
+                        <div id="verifyStatusBox" class="verify-status-alert hidden">
+                            <span id="verifyStatusText">Inspecting public bio...</span>
+                        </div>
+
+                        <div class="verify-actions-row margin-top">
+                            <button type="button" class="btn btn-primary" id="confirmBioVerificationBtn">
+                                <i data-lucide="shield-check"></i> Check Bio & Confirm
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="instantVerifyDemoBtn" title="Instant verification without modifying live bio">
+                                <i data-lucide="zap"></i> Instant Verify (Demo)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Controller -->
+    <script src="app.js?v=2.6"></script>
+</body>
+</html>
