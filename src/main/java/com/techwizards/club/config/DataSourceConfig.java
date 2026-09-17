@@ -60,6 +60,9 @@ public class DataSourceConfig {
                 int port = uri.getPort() > 0 ? uri.getPort() : 5432;
                 String path = uri.getPath();
                 targetUrl = "jdbc:postgresql://" + uri.getHost() + ":" + port + path;
+                if (uri.getQuery() != null && !uri.getQuery().trim().isEmpty()) {
+                    targetUrl += "?" + uri.getQuery().trim();
+                }
             } catch (Exception e) {
                 System.err.println("Warning: Could not parse postgres DATABASE_URL as URI: " + e.getMessage());
             }
