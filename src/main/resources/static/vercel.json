@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://medstellar-backend.onrender.com/api/$1"
+      "destination": "https://medstellar.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",
