@@ -91,6 +91,12 @@ public class DataSourceConfig {
             }
         }
 
+        // Safety: If database is set to protected MySQL 'sys' schema, redirect to 'test' database
+        if (targetUrl != null && (targetUrl.contains("/sys?") || targetUrl.endsWith("/sys"))) {
+            System.out.println("Redirecting from protected 'sys' schema to 'test' database.");
+            targetUrl = targetUrl.replace("/sys?", "/test?").replaceAll("/sys$", "/test");
+        }
+
         // Detect if running in cloud container (Render sets RENDER=true or PORT!=8081) and no cloud DB provided
         boolean isRender = "true".equalsIgnoreCase(System.getenv("RENDER"))
                 || (System.getenv("PORT") != null && !"8081".equals(System.getenv("PORT")));
