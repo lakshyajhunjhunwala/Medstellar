@@ -97,6 +97,13 @@ function showPortalShell() {
 }
 
 function loginUser(email, password) {
+    const submitBtn = document.querySelector('#loginForm button[type="submit"]');
+    const originalText = submitBtn ? submitBtn.innerHTML : 'Authenticate & Enter';
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Connecting to server...';
+    }
+
     const params = new URLSearchParams();
     params.append('email', email);
     params.append('password', password);
@@ -106,8 +113,14 @@ function loginUser(email, password) {
     })
     .then(async response => {
         if (!response.ok) {
+            if (response.status === 429) {
+                throw new Error("Render cloud server is waking up from hibernation. Please wait ~10 seconds and try again!");
+            }
+            if (response.status >= 500) {
+                throw new Error("Server is currently warming up (Render free tier). Please wait a few seconds and try again.");
+            }
             const errData = await response.json().catch(() => ({}));
-            throw new Error(errData.message || "Invalid email or password");
+            throw new Error(errData.message || (response.status === 401 ? "Incorrect password. Passwords are case-sensitive." : "Authentication failed! Check credentials."));
         }
         return response.json();
     })
@@ -132,6 +145,12 @@ function loginUser(email, password) {
     .catch(err => {
         alert(err.message || "Authentication failed! Check credentials.");
         console.error(err);
+    })
+    .finally(() => {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }
     });
 }
 

@@ -163,154 +163,128 @@ public class DatabaseSeeder implements CommandLineRunner {
     }
 
     private void seedDefaultUsers() {
-        if (userRepository.count() > 0) {
-            userRepository.findAll().forEach(u -> {
-                boolean changed = false;
-                if ("Lakshya".equalsIgnoreCase(u.getUsername()) || (u.getEmail() != null && u.getEmail().toLowerCase().contains("lakshya"))) {
-                    u.setRole("ADMIN");
-                    u.setPassword("Lakshya@98");
-                    u.setFullName("Lakshya Jhunjhunwala");
-                    u.setAcademicYear("2nd Year");
-                    u.setStatusEmoji("🤩");
-                    u.setBio("Core Member & Competitive Programmer @ MEDSTELLAR. Passionate about DSA, Web Systems, and Open Source.");
-                    u.setAvatarUrl("https://api.dicebear.com/7.x/bottts/svg?seed=Lakshya");
-                    u.setLeetcodeUsername("lakshyajhunjhunwala");
-                    u.setLeetcodeSolved(120);
-                    u.setLeetcodeRank("1418643");
-                    u.setLeetcodeBadges(1);
-                    u.setCodechefUsername("glee_mount_91");
-                    u.setCodechefStars("1 Star(s)");
-                    u.setCodechefRank("11961455");
-                    u.setCodechefRating(1196);
-                    u.setCodechefSolved(34);
-                    u.setCodeforcesUsername("lakshya9830");
-                    u.setCodeforcesRating(0);
-                    u.setCodeforcesRank("unrated");
-                    u.setCodeforcesSolved(0);
-                    u.setGfgUsername("lakshyajhun3plt");
-                    u.setGfgRank(37);
-                    u.setGfgScore(66);
-                    u.setGfgSolved(47);
-                    u.setPreviousRank(19);
-                    u.setMaxSolvedDay(2);
-                    u.setAvgSolvedDay(0.29);
-                    u.setPoints(1382);
-                    u.setStreak(3);
-                    u.setRankName("Grandmaster");
-                    u.setLeetcodeVerified(true);
-                    u.setCodechefVerified(true);
-                    u.setCodeforcesVerified(true);
-                    u.setGfgVerified(true);
-                    if (u.getVerificationToken() == null || u.getVerificationToken().trim().isEmpty()) {
-                        u.setVerificationToken("MS-9830");
-                    }
-                    u.setApprovalStatus("APPROVED");
-                    changed = true;
-                } else {
-                    if (u.getRole() == null || u.getRole().trim().isEmpty()) {
-                        u.setRole("MEMBER");
-                        changed = true;
-                    }
-                    if (u.getPassword() == null || u.getPassword().trim().isEmpty()) {
-                        u.setPassword("member123");
-                        changed = true;
-                    }
-                    if (u.getFullName() == null || u.getFullName().trim().isEmpty()) {
-                        u.setFullName(u.getUsername());
-                        changed = true;
-                    }
-                    if (u.getVerificationToken() == null || u.getVerificationToken().trim().isEmpty()) {
-                        u.setVerificationToken("MS-" + (1000 + (int)(Math.random() * 9000)));
-                        changed = true;
-                    }
-                    if (u.getApprovalStatus() == null || u.getApprovalStatus().trim().isEmpty()) {
-                        u.setApprovalStatus("APPROVED");
-                        changed = true;
-                    }
-                }
-                if (changed) {
-                    userRepository.save(u);
-                }
-            });
-            return;
+        // 1. Ensure Lakshya (Administrator) exists and has ADMIN role
+        userRepository.findByUsername("Lakshya").ifPresentOrElse(u -> {
+            u.setRole("ADMIN");
+            u.setPassword("Lakshya@98");
+            u.setEmail("lakshya@college.edu");
+            u.setFullName("Lakshya Jhunjhunwala");
+            u.setApprovalStatus("APPROVED");
+            userRepository.save(u);
+        }, () -> {
+            User user4 = new User("Lakshya", "lakshya@college.edu");
+            user4.setPassword("Lakshya@98");
+            user4.setRole("ADMIN");
+            user4.setFullName("Lakshya Jhunjhunwala");
+            user4.setAcademicYear("2nd Year");
+            user4.setStatusEmoji("🤩");
+            user4.setBio("Core Member & Competitive Programmer @ MEDSTELLAR. Passionate about DSA, Web Systems, and Open Source.");
+            user4.setAvatarUrl("https://api.dicebear.com/7.x/bottts/svg?seed=Lakshya");
+            user4.setPoints(1382);
+            user4.setStreak(3);
+            user4.setGithubUsername("lakshya-codes");
+            user4.setLeetcodeUsername("lakshyajhunjhunwala");
+            user4.setLeetcodeSolved(120);
+            user4.setLeetcodeRank("1418643");
+            user4.setLeetcodeBadges(1);
+            user4.setCodechefUsername("glee_mount_91");
+            user4.setCodechefStars("1 Star(s)");
+            user4.setCodechefRank("11961455");
+            user4.setCodechefRating(1196);
+            user4.setCodechefSolved(34);
+            user4.setCodeforcesUsername("lakshya9830");
+            user4.setCodeforcesRating(0);
+            user4.setCodeforcesRank("unrated");
+            user4.setCodeforcesSolved(0);
+            user4.setGfgUsername("lakshyajhun3plt");
+            user4.setGfgRank(37);
+            user4.setGfgScore(66);
+            user4.setGfgSolved(47);
+            user4.setPreviousRank(19);
+            user4.setMaxSolvedDay(2);
+            user4.setAvgSolvedDay(0.29);
+            user4.setRankName("Grandmaster");
+            user4.setLeetcodeVerified(true);
+            user4.setCodechefVerified(true);
+            user4.setCodeforcesVerified(true);
+            user4.setGfgVerified(true);
+            user4.setVerificationToken("MS-9830");
+            user4.setApprovalStatus("APPROVED");
+            user4.setJoinDate(LocalDate.now().minusDays(5));
+            user4.setLastSolvedDate(LocalDate.now());
+            userRepository.save(user4);
+        });
+
+        // 2. Ensure Shamirul exists
+        if (userRepository.findByUsername("Shamirul").isEmpty()) {
+            User user1 = new User("Shamirul", "shamirul@college.edu");
+            user1.setPassword("member123");
+            user1.setRole("MEMBER");
+            user1.setFullName("Shamirul Huda");
+            user1.setPoints(1150);
+            user1.setStreak(12);
+            user1.setGithubUsername("shamirul-huda");
+            user1.setLeetcodeUsername("shamirul_lc");
+            user1.setRankName("Grandmaster");
+            user1.setApprovalStatus("APPROVED");
+            user1.setJoinDate(LocalDate.now().minusDays(30));
+            user1.setLastSolvedDate(LocalDate.now());
+            userRepository.save(user1);
         }
 
-        // Seed top performers from SRM Ramapuram club example
-        User user1 = new User("Shamirul", "shamirul@college.edu");
-        user1.setPassword("member123");
-        user1.setRole("MEMBER");
-        user1.setFullName("Shamirul Huda");
-        user1.setPoints(1150);
-        user1.setStreak(12);
-        user1.setGithubUsername("shamirul-huda");
-        user1.setLeetcodeUsername("shamirul_lc");
-        user1.setJoinDate(LocalDate.now().minusDays(30));
-        user1.setLastSolvedDate(LocalDate.now());
+        // 3. Ensure Saksham exists
+        if (userRepository.findByUsername("Saksham").isEmpty()) {
+            User user2 = new User("Saksham", "saksham@college.edu");
+            user2.setPassword("member123");
+            user2.setRole("MEMBER");
+            user2.setFullName("Saksham Gupta");
+            user2.setPoints(690);
+            user2.setStreak(8);
+            user2.setGithubUsername("saksham-gupta");
+            user2.setLeetcodeUsername("saksham_lc");
+            user2.setRankName("Code Wizard");
+            user2.setApprovalStatus("APPROVED");
+            user2.setJoinDate(LocalDate.now().minusDays(20));
+            user2.setLastSolvedDate(LocalDate.now());
+            userRepository.save(user2);
+        }
 
-        User user2 = new User("Saksham", "saksham@college.edu");
-        user2.setPassword("member123");
-        user2.setRole("MEMBER");
-        user2.setFullName("Saksham Gupta");
-        user2.setPoints(690);
-        user2.setStreak(8);
-        user2.setGithubUsername("saksham-gupta");
-        user2.setLeetcodeUsername("saksham_lc");
-        user2.setJoinDate(LocalDate.now().minusDays(20));
-        user2.setLastSolvedDate(LocalDate.now());
+        // 4. Ensure Revan exists
+        if (userRepository.findByUsername("Revan").isEmpty()) {
+            User user3 = new User("Revan", "revan@college.edu");
+            user3.setPassword("member123");
+            user3.setRole("MEMBER");
+            user3.setFullName("V.R. Revan");
+            user3.setPoints(670);
+            user3.setStreak(5);
+            user3.setGithubUsername("vr-revan");
+            user3.setLeetcodeUsername("revan_lc");
+            user3.setRankName("Code Wizard");
+            user3.setApprovalStatus("APPROVED");
+            user3.setJoinDate(LocalDate.now().minusDays(15));
+            user3.setLastSolvedDate(LocalDate.now().minusDays(1));
+            userRepository.save(user3);
+        }
 
-        User user3 = new User("Revan", "revan@college.edu");
-        user3.setPassword("member123");
-        user3.setRole("MEMBER");
-        user3.setFullName("V.R. Revan");
-        user3.setPoints(670);
-        user3.setStreak(5);
-        user3.setGithubUsername("vr-revan");
-        user3.setLeetcodeUsername("revan_lc");
-        user3.setJoinDate(LocalDate.now().minusDays(15));
-        user3.setLastSolvedDate(LocalDate.now().minusDays(1));
-
-        // Seed Lakshya (the admin user)
-        User user4 = new User("Lakshya", "lakshya@college.edu");
-        user4.setPassword("Lakshya@98");
-        user4.setRole("ADMIN");
-        user4.setFullName("Lakshya Jhunjhunwala");
-        user4.setAcademicYear("2nd Year");
-        user4.setStatusEmoji("🤩");
-        user4.setBio("Core Member & Competitive Programmer @ MEDSTELLAR. Passionate about DSA, Web Systems, and Open Source.");
-        user4.setAvatarUrl("https://api.dicebear.com/7.x/bottts/svg?seed=Lakshya");
-        user4.setPoints(1382);
-        user4.setStreak(3);
-        user4.setGithubUsername("lakshya-codes");
-        user4.setLeetcodeUsername("lakshyajhunjhunwala");
-        user4.setLeetcodeSolved(120);
-        user4.setLeetcodeRank("1418643");
-        user4.setLeetcodeBadges(1);
-        user4.setCodechefUsername("glee_mount_91");
-        user4.setCodechefStars("1 Star(s)");
-        user4.setCodechefRank("11961455");
-        user4.setCodechefRating(1196);
-        user4.setCodechefSolved(34);
-        user4.setCodeforcesUsername("lakshya9830");
-        user4.setCodeforcesRating(0);
-        user4.setCodeforcesRank("unrated");
-        user4.setCodeforcesSolved(0);
-        user4.setGfgUsername("lakshyajhun3plt");
-        user4.setGfgRank(37);
-        user4.setGfgScore(66);
-        user4.setGfgSolved(47);
-        user4.setPreviousRank(19);
-        user4.setMaxSolvedDay(2);
-        user4.setAvgSolvedDay(0.29);
-        user4.setRankName("Grandmaster");
-        user4.setLeetcodeVerified(true);
-        user4.setCodechefVerified(true);
-        user4.setCodeforcesVerified(true);
-        user4.setGfgVerified(true);
-        user4.setVerificationToken("MS-9830");
-        user4.setJoinDate(LocalDate.now().minusDays(5));
-        user4.setLastSolvedDate(LocalDate.now());
-
-        userRepository.saveAll(Arrays.asList(user1, user2, user3, user4));
-        System.out.println("Seeded top performers leaderboard data successfully.");
+        // 5. Ensure any other existing users have proper defaults
+        userRepository.findAll().forEach(u -> {
+            boolean changed = false;
+            if (u.getRole() == null || u.getRole().trim().isEmpty()) {
+                u.setRole("MEMBER");
+                changed = true;
+            }
+            if (u.getPassword() == null || u.getPassword().trim().isEmpty()) {
+                u.setPassword("member123");
+                changed = true;
+            }
+            if (u.getApprovalStatus() == null || u.getApprovalStatus().trim().isEmpty()) {
+                u.setApprovalStatus("APPROVED");
+                changed = true;
+            }
+            if (changed) {
+                userRepository.save(u);
+            }
+        });
+        System.out.println("Verified club users seeded successfully.");
     }
 }
