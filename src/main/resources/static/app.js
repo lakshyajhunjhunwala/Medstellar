@@ -2028,7 +2028,7 @@ const PLATFORM_VERIFY_CONFIGS = {
         badgeClass: 'leetcode-badge-logo',
         handleField: 'leetcodeUsername',
         settingsUrl: () => `https://leetcode.com/profile/`,
-        instructions: 'Open your LeetCode profile settings and change your <strong>Name (Display Name)</strong> to this token, then click "Save". (You can change it back anytime after verification!)'
+        instructions: 'Open your LeetCode profile settings and paste this token into your <strong>Name</strong> (Real Name) OR <strong>About Me</strong> section, then click "Save". (You can revert it anytime after verification!)'
     },
     codechef: {
         name: 'CodeChef',
