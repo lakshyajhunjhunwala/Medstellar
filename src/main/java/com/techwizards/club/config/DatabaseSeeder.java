@@ -281,10 +281,28 @@ public class DatabaseSeeder implements CommandLineRunner {
                 u.setApprovalStatus("APPROVED");
                 changed = true;
             }
+
+            // Reset verification for all non-admin members so they can test the new verification process
+            boolean isAdmin = "ADMIN".equalsIgnoreCase(u.getRole()) ||
+                              "Lakshya".equalsIgnoreCase(u.getUsername()) ||
+                              (u.getEmail() != null && u.getEmail().toLowerCase().contains("lakshya"));
+            if (!isAdmin) {
+                if (Boolean.TRUE.equals(u.getLeetcodeVerified()) ||
+                    Boolean.TRUE.equals(u.getCodechefVerified()) ||
+                    Boolean.TRUE.equals(u.getCodeforcesVerified()) ||
+                    Boolean.TRUE.equals(u.getGfgVerified())) {
+                    u.setLeetcodeVerified(false);
+                    u.setCodechefVerified(false);
+                    u.setCodeforcesVerified(false);
+                    u.setGfgVerified(false);
+                    changed = true;
+                }
+            }
+
             if (changed) {
                 userRepository.save(u);
             }
         });
-        System.out.println("Verified club users seeded successfully.");
+        System.out.println("Club members initialized: non-admin verifications reset for testing new verification flow.");
     }
 }

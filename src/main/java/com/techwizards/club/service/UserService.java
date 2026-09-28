@@ -396,4 +396,26 @@ public class UserService {
         }
         return false;
     }
+
+    // Reset platform verifications for all non-admin members
+    public int resetMemberVerifications(String adminUsername) {
+        List<User> users = userRepository.findAll();
+        int count = 0;
+        for (User u : users) {
+            boolean isAdmin = "ADMIN".equalsIgnoreCase(u.getRole()) ||
+                              "Lakshya".equalsIgnoreCase(u.getUsername()) ||
+                              (u.getEmail() != null && u.getEmail().toLowerCase().contains("lakshya"));
+            if (!isAdmin) {
+                u.setLeetcodeVerified(false);
+                u.setCodechefVerified(false);
+                u.setCodeforcesVerified(false);
+                u.setGfgVerified(false);
+                userRepository.save(u);
+                count++;
+            }
+        }
+        securityLogRepository.save(new SecurityLog("Platform", "INFO",
+                "Admin " + (adminUsername != null ? adminUsername : "Lakshya") + " reset platform verifications for " + count + " members to test new verification process.", "OK"));
+        return count;
+    }
 }

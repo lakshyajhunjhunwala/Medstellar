@@ -200,6 +200,17 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    // Reset platform verifications for all non-admin members
+    @PostMapping("/admin/reset-verifications")
+    public ResponseEntity<?> resetVerifications(@RequestParam(required = false) String adminUsername) {
+        int resetCount = userService.resetMemberVerifications(adminUsername);
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Successfully reset platform verifications for " + resetCount + " members. Admin status preserved.",
+                "resetCount", resetCount
+        ));
+    }
 }
 
 

@@ -1104,6 +1104,29 @@ function setupEventHandlers() {
     const refreshPendingBtn = document.getElementById('refreshPendingMembersBtn');
     if (refreshPendingBtn) refreshPendingBtn.addEventListener('click', loadPendingMembers);
 
+    // Reset member verifications trigger in Control Center
+    const resetVerificationsBtn = document.getElementById('resetMemberVerificationsBtn');
+    if (resetVerificationsBtn) {
+        resetVerificationsBtn.addEventListener('click', () => {
+            if (!confirm("Are you sure you want to reset platform verification for all non-admin members?\n\nThis will allow all members to experience the new Profile Name verification flow. Your Admin verification status will be preserved.")) {
+                return;
+            }
+            const adminUser = currentUser ? currentUser.username : 'Lakshya';
+            fetch(`${API_BASE}/users/admin/reset-verifications?adminUsername=${encodeURIComponent(adminUser)}`, {
+                method: 'POST'
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(`✅ ${data.message || 'Platform verifications reset successfully!'}`);
+                if (window.location.hash === '#dashboard') loadDashboardData();
+            })
+            .catch(err => {
+                console.error("Reset error:", err);
+                alert("Failed to reset verifications. Check connection.");
+            });
+        });
+    }
+
     // Sidebar trigger
     document.getElementById('logoutBtn').addEventListener('click', logout);
 
