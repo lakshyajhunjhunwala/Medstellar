@@ -215,55 +215,10 @@ public class DatabaseSeeder implements CommandLineRunner {
             userRepository.save(user4);
         });
 
-        // 2. Ensure Shamirul exists
-        if (userRepository.findByUsername("Shamirul").isEmpty()) {
-            User user1 = new User("Shamirul", "shamirul@college.edu");
-            user1.setPassword("member123");
-            user1.setRole("MEMBER");
-            user1.setFullName("Shamirul Huda");
-            user1.setPoints(1150);
-            user1.setStreak(12);
-            user1.setGithubUsername("shamirul-huda");
-            user1.setLeetcodeUsername("shamirul_lc");
-            user1.setRankName("Grandmaster");
-            user1.setApprovalStatus("APPROVED");
-            user1.setJoinDate(LocalDate.now().minusDays(30));
-            user1.setLastSolvedDate(LocalDate.now());
-            userRepository.save(user1);
-        }
-
-        // 3. Ensure Saksham exists
-        if (userRepository.findByUsername("Saksham").isEmpty()) {
-            User user2 = new User("Saksham", "saksham@college.edu");
-            user2.setPassword("member123");
-            user2.setRole("MEMBER");
-            user2.setFullName("Saksham Gupta");
-            user2.setPoints(690);
-            user2.setStreak(8);
-            user2.setGithubUsername("saksham-gupta");
-            user2.setLeetcodeUsername("saksham_lc");
-            user2.setRankName("Code Wizard");
-            user2.setApprovalStatus("APPROVED");
-            user2.setJoinDate(LocalDate.now().minusDays(20));
-            user2.setLastSolvedDate(LocalDate.now());
-            userRepository.save(user2);
-        }
-
-        // 4. Ensure Revan exists
-        if (userRepository.findByUsername("Revan").isEmpty()) {
-            User user3 = new User("Revan", "revan@college.edu");
-            user3.setPassword("member123");
-            user3.setRole("MEMBER");
-            user3.setFullName("V.R. Revan");
-            user3.setPoints(670);
-            user3.setStreak(5);
-            user3.setGithubUsername("vr-revan");
-            user3.setLeetcodeUsername("revan_lc");
-            user3.setRankName("Code Wizard");
-            user3.setApprovalStatus("APPROVED");
-            user3.setJoinDate(LocalDate.now().minusDays(15));
-            user3.setLastSolvedDate(LocalDate.now().minusDays(1));
-            userRepository.save(user3);
+        // Permanently remove deprecated mock users (Shamirul, Saksham, Revan)
+        List<String> deprecatedUsers = Arrays.asList("Shamirul", "Saksham", "Revan");
+        for (String uname : deprecatedUsers) {
+            userRepository.findByUsername(uname).ifPresent(userRepository::delete);
         }
 
         // 5. Ensure any other existing users have proper defaults

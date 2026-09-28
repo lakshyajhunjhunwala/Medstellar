@@ -474,10 +474,10 @@ function loadPublicHeroPodium() {
         if (!podiumOuter) return;
         podiumOuter.innerHTML = '';
 
-        // Match the users seeded or fallbacks
-        const silverUser = users[1] || { username: 'MD Shamirul', points: 300 };
-        const goldUser = users[0] || { username: 'Saksham Gupta', points: 450 };
-        const bronzeUser = users[2] || { username: 'VR REVAN', points: 250 };
+        // Match the users from live leaderboard or generic fallbacks
+        const silverUser = users[1] || { username: 'Silver Performer', points: 300 };
+        const goldUser = users[0] || { username: 'Gold Performer', points: 450 };
+        const bronzeUser = users[2] || { username: 'Bronze Performer', points: 250 };
 
         const silverHtml = `
             <div class="podium-card silver-card">
