@@ -125,26 +125,11 @@ public class PlatformVerificationService {
                     break;
             }
 
-            // EXP Calculation Rules:
-            // 1. GFG and LeetCode: Flat 100 EXP regardless of question count
-            // 2. CodeChef: For every question solved in CodeChef contests, 100 EXP each
-            int expAward = 100;
-            String expMsg = "+100 EXP awarded!";
-            if ("codechef".equals(p)) {
-                int solvedCount = (user.getCodechefSolved() != null && user.getCodechefSolved() > 0) ? user.getCodechefSolved() : 1;
-                expAward = solvedCount * 100;
-                expMsg = "+" + expAward + " EXP awarded (" + solvedCount + " contest question(s) x 100 EXP)!";
-            } else if ("leetcode".equals(p) || "gfg".equals(p) || "geeksforgeeks".equals(p)) {
-                expAward = 100;
-                expMsg = "+100 EXP awarded (flat platform reward)!";
-            }
-
-            user.setPoints(user.getPoints() + expAward);
-            user.updateRank();
+            // Save verified state (EXP is credited at the end of the day during daily platform sync)
             User saved = userRepository.save(user);
 
             response.put("success", true);
-            response.put("message", "🎉 Ownership Verified! " + platformName + " handle @" + handle + " is now confirmed. " + expMsg);
+            response.put("message", "🎉 Ownership Verified! " + platformName + " handle @" + handle + " is now confirmed. Verified platform EXP will be audited and credited at the end of the day according to club rules!");
             response.put("user", saved);
             return response;
         } else {

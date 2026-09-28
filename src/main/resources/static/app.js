@@ -224,6 +224,9 @@ function updateUIForLoggedInState() {
 
     // Check if streak is at risk
     checkStreakWarning();
+
+    // Check if daily platform EXP was awarded for next-day display
+    checkDailyExpNotification();
     
     if (window.lucide) window.lucide.createIcons();
 }
@@ -236,6 +239,8 @@ function updateUIForLoggedOutState() {
     if (lcInput) lcInput.value = '';
     const warningAlert = document.getElementById('streakWarningAlert');
     if (warningAlert) warningAlert.classList.add('hidden');
+    const expAlert = document.getElementById('dailyExpCreditAlert');
+    if (expAlert) expAlert.classList.add('hidden');
 
     const navSecurityItem = document.getElementById('navSecurityItem');
     if (navSecurityItem) {
@@ -257,6 +262,41 @@ function checkStreakWarning() {
         warningAlert.classList.add('hidden');
     }
 }
+
+// Next-day visibility check for daily platform EXP credits
+function checkDailyExpNotification() {
+    if (!currentUser) return;
+    const alertElem = document.getElementById('dailyExpCreditAlert');
+    const textElem = document.getElementById('dailyExpCreditText');
+    if (!alertElem || !textElem) return;
+
+    const awarded = currentUser.lastDailyExpAwarded || 0;
+    const awardDate = currentUser.lastExpAwardDate;
+    const breakdown = currentUser.lastDailyExpBreakdown || '';
+
+    if (awarded > 0 && awardDate) {
+        const ackKey = `exp_notice_ack_${awardDate}_${currentUser.username}`;
+        if (!localStorage.getItem(ackKey)) {
+            textElem.innerHTML = `<strong>+${awarded} EXP</strong> credited from yesterday's verified platform checks (${breakdown}). Verified & added to your leaderboard standing!`;
+            alertElem.classList.remove('hidden');
+            if (window.lucide) window.lucide.createIcons();
+        } else {
+            alertElem.classList.add('hidden');
+        }
+    } else {
+        alertElem.classList.add('hidden');
+    }
+}
+
+function dismissDailyExpAlert() {
+    const alertElem = document.getElementById('dailyExpCreditAlert');
+    if (alertElem) alertElem.classList.add('hidden');
+    if (currentUser && currentUser.lastExpAwardDate) {
+        const ackKey = `exp_notice_ack_${currentUser.lastExpAwardDate}_${currentUser.username}`;
+        localStorage.setItem(ackKey, 'true');
+    }
+}
+window.dismissDailyExpAlert = dismissDailyExpAlert;
 
 // Public section anchors that do not require authentication
 const publicSections = ['#home', '#about-club', '#ecosystem', '#performers', '#vision', ''];
@@ -1103,6 +1143,37 @@ function setupEventHandlers() {
     // Refresh pending members in Control Center
     const refreshPendingBtn = document.getElementById('refreshPendingMembersBtn');
     if (refreshPendingBtn) refreshPendingBtn.addEventListener('click', loadPendingMembers);
+
+    // Audit & Run Daily EXP Sync trigger in Control Center
+    const runDailyExpSyncBtn = document.getElementById('runDailyExpSyncBtn');
+    if (runDailyExpSyncBtn) {
+        runDailyExpSyncBtn.addEventListener('click', () => {
+            if (!confirm("Are you sure you want to run the Daily Platform EXP Audit now?\n\nThis will scan all verified member accounts, calculate EXP earned based on club rules (100 EXP max for LC/GFG, 100 EXP per contest problem for CodeChef), award the points, and queue the next-day dashboard notification.")) {
+                return;
+            }
+            const origHtml = runDailyExpSyncBtn.innerHTML;
+            runDailyExpSyncBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Auditing platforms...`;
+            runDailyExpSyncBtn.disabled = true;
+
+            fetch(`${API_BASE}/users/admin/run-daily-exp-sync?force=true`, {
+                method: 'POST'
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(`✨ ${data.message || 'Daily EXP sync completed successfully!'}\n\nMembers updated: ${data.membersUpdated != null ? data.membersUpdated : '0'}\nTotal EXP distributed: ${data.totalExpDistributed != null ? data.totalExpDistributed : '0'}`);
+                if (window.location.hash === '#dashboard') loadDashboardData();
+            })
+            .catch(err => {
+                console.error("Daily EXP sync error:", err);
+                alert("Failed to complete Daily EXP sync. Please check server logs.");
+            })
+            .finally(() => {
+                runDailyExpSyncBtn.innerHTML = origHtml;
+                runDailyExpSyncBtn.disabled = false;
+                if (window.lucide) lucide.createIcons();
+            });
+        });
+    }
 
     // Reset member verifications trigger in Control Center
     const resetVerificationsBtn = document.getElementById('resetMemberVerificationsBtn');

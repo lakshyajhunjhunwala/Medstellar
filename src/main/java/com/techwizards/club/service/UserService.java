@@ -6,10 +6,14 @@ import com.techwizards.club.model.User;
 import com.techwizards.club.repository.AnnouncementRepository;
 import com.techwizards.club.repository.SecurityLogRepository;
 import com.techwizards.club.repository.UserRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -417,5 +421,85 @@ public class UserService {
         securityLogRepository.save(new SecurityLog("Platform", "INFO",
                 "Admin " + (adminUsername != null ? adminUsername : "Lakshya") + " reset platform verifications for " + count + " members to test new verification process.", "OK"));
         return count;
+    }
+
+    // End-of-the-day Batch Check & EXP Awarding Job:
+    // Awards EXP according to club rules:
+    // 1. LeetCode verified: flat 100 EXP
+    // 2. GFG verified: flat 100 EXP
+    // 3. CodeChef verified: 100 EXP per question solved in contests
+    // 4. Codeforces verified: 50 EXP baseline + solved EXP
+    public Map<String, Object> processDailyPlatformExp(boolean force) {
+        List<User> users = userRepository.findAll();
+        LocalDate today = LocalDate.now();
+        int totalMembersUpdated = 0;
+        int totalExpDistributed = 0;
+
+        for (User user : users) {
+            // If already processed today and not forced, skip
+            if (!force && today.equals(user.getLastExpAwardDate())) {
+                continue;
+            }
+
+            int dailyExp = 0;
+            List<String> breakdownParts = new ArrayList<>();
+
+            // 1. LeetCode: Flat 100 EXP
+            if (Boolean.TRUE.equals(user.getLeetcodeVerified()) && user.getLeetcodeUsername() != null && !user.getLeetcodeUsername().trim().isEmpty()) {
+                dailyExp += 100;
+                breakdownParts.add("LeetCode (+100 EXP)");
+            }
+
+            // 2. GeeksforGeeks: Flat 100 EXP
+            if (Boolean.TRUE.equals(user.getGfgVerified()) && user.getGfgUsername() != null && !user.getGfgUsername().trim().isEmpty()) {
+                dailyExp += 100;
+                breakdownParts.add("GeeksforGeeks (+100 EXP)");
+            }
+
+            // 3. CodeChef: 100 EXP per contest question solved
+            if (Boolean.TRUE.equals(user.getCodechefVerified()) && user.getCodechefUsername() != null && !user.getCodechefUsername().trim().isEmpty()) {
+                int contestSolved = (user.getCodechefSolved() != null && user.getCodechefSolved() > 0) ? user.getCodechefSolved() : 1;
+                int ccExp = contestSolved * 100;
+                dailyExp += ccExp;
+                breakdownParts.add("CodeChef (" + contestSolved + " contest solved x 100 = +" + ccExp + " EXP)");
+            }
+
+            // 4. Codeforces: 50 EXP baseline + solved
+            if (Boolean.TRUE.equals(user.getCodeforcesVerified()) && user.getCodeforcesUsername() != null && !user.getCodeforcesUsername().trim().isEmpty()) {
+                int cfSolved = (user.getCodeforcesSolved() != null ? user.getCodeforcesSolved() * 10 : 0);
+                int cfExp = 50 + cfSolved;
+                dailyExp += cfExp;
+                breakdownParts.add("Codeforces (+" + cfExp + " EXP)");
+            }
+
+            if (dailyExp > 0) {
+                user.setLastDailyExpAwarded(dailyExp);
+                user.setLastExpAwardDate(today);
+                user.setLastDailyExpBreakdown(String.join(", ", breakdownParts));
+                user.setPoints(user.getPoints() + dailyExp);
+                user.updateRank();
+                userRepository.save(user);
+                totalMembersUpdated++;
+                totalExpDistributed += dailyExp;
+            }
+        }
+
+        String logMsg = "Daily platform EXP processing completed: " + totalExpDistributed + " EXP credited across " + totalMembersUpdated + " verified members.";
+        securityLogRepository.save(new SecurityLog("PLATFORM_SYNC", "SUCCESS", logMsg, "OK"));
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("message", logMsg);
+        result.put("membersUpdated", totalMembersUpdated);
+        result.put("totalExpDistributed", totalExpDistributed);
+        result.put("date", today.toString());
+        return result;
+    }
+
+    // Automated end-of-the-day scheduled job (runs every day at 23:55)
+    @Scheduled(cron = "0 55 23 * * *")
+    public void scheduledDailyPlatformExpJob() {
+        System.out.println("Executing automated end-of-day platform EXP sync job...");
+        processDailyPlatformExp(false);
     }
 }

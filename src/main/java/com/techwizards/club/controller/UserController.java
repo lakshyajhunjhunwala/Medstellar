@@ -211,6 +211,12 @@ public class UserController {
                 "resetCount", resetCount
         ));
     }
+
+    // Trigger end-of-day daily platform EXP sync job
+    @PostMapping("/admin/run-daily-exp-sync")
+    public ResponseEntity<?> runDailyExpSync(@RequestParam(defaultValue = "false") boolean force) {
+        return ResponseEntity.ok(userService.processDailyPlatformExp(force));
+    }
 }
 
 

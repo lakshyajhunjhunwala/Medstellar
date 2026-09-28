@@ -345,6 +345,20 @@
 
                 <!-- 1. MEMBER DASHBOARD VIEW -->
                 <section id="view-dashboard" class="page-view active">
+                    <!-- Daily Platform EXP Credit Notification (Next Day Visibility) -->
+                    <div id="dailyExpCreditAlert" class="alert-banner info hidden" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15)); border: 1px solid rgba(16, 185, 129, 0.35); margin-bottom: 1.25rem;">
+                        <div class="alert-content justify-between flex-1" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                            <div class="flex-align gap-3">
+                                <i data-lucide="sparkles" class="text-emerald" style="width: 22px; height: 22px;"></i>
+                                <div class="alert-text">
+                                    <strong style="color: #10b981;">Daily Platform EXP Credited!</strong>
+                                    <span id="dailyExpCreditText" style="display: block; font-size: 0.9rem; margin-top: 2px;">Your verified platform activity has been audited and rewarded.</span>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-xs btn-secondary" onclick="dismissDailyExpAlert()">Dismiss</button>
+                        </div>
+                    </div>
+
                     <!-- Banner Info Alert (Streak Break Risk) -->
                     <div id="streakWarningAlert" class="alert-banner warning hidden">
                         <div class="alert-content">
@@ -1092,6 +1106,9 @@
                                 <button class="btn btn-icon btn-sm" id="refreshPendingMembersBtn" title="Refresh Applications">
                                     <i data-lucide="rotate-cw"></i>
                                 </button>
+                                <button class="btn btn-primary btn-sm" id="runDailyExpSyncBtn" title="Audit verified platforms and distribute daily EXP according to club rules">
+                                    <i data-lucide="sparkles"></i> Audit & Run Daily EXP Sync
+                                </button>
                                 <button class="btn btn-warning btn-sm" id="resetMemberVerificationsBtn" title="Reset all members' platform verification so they test new verification process">
                                     <i data-lucide="shield-alert"></i> Reset Member Verifications
                                 </button>
@@ -1705,6 +1722,6 @@
     </div>
 
     <!-- Application Controller -->
-    <script src="app.js?v=2.8"></script>
+    <script src="app.js?v=2.9"></script>
 </body>
 </html>

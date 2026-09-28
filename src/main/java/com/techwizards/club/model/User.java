@@ -66,6 +66,11 @@ public class User {
     private Boolean gfgVerified = false;
     private String verificationToken = "";
 
+    // Daily Platform EXP Tracking
+    private Integer lastDailyExpAwarded = 0;
+    private LocalDate lastExpAwardDate;
+    private String lastDailyExpBreakdown = "";
+
     // Membership Approval Status: "APPROVED", "PENDING", "REJECTED"
     private String approvalStatus = "APPROVED";
 
@@ -421,6 +426,30 @@ public class User {
 
     public void setApprovalStatus(String approvalStatus) {
         this.approvalStatus = approvalStatus;
+    }
+
+    public Integer getLastDailyExpAwarded() {
+        return lastDailyExpAwarded != null ? lastDailyExpAwarded : 0;
+    }
+
+    public void setLastDailyExpAwarded(Integer lastDailyExpAwarded) {
+        this.lastDailyExpAwarded = lastDailyExpAwarded;
+    }
+
+    public LocalDate getLastExpAwardDate() {
+        return lastExpAwardDate;
+    }
+
+    public void setLastExpAwardDate(LocalDate lastExpAwardDate) {
+        this.lastExpAwardDate = lastExpAwardDate;
+    }
+
+    public String getLastDailyExpBreakdown() {
+        return lastDailyExpBreakdown != null ? lastDailyExpBreakdown : "";
+    }
+
+    public void setLastDailyExpBreakdown(String lastDailyExpBreakdown) {
+        this.lastDailyExpBreakdown = lastDailyExpBreakdown;
     }
 
     // Helper method to automatically calculate and update user rank based on points
