@@ -194,7 +194,7 @@ public class UserService {
         // Calculate platform activity stats
         int totalExp = 0;
 
-        // LeetCode Stats & EXP
+        // LeetCode Stats & EXP: GFG and LeetCode get only 100 EXP total regardless of questions solved
         if (user.getLeetcodeUsername() != null && !user.getLeetcodeUsername().trim().isEmpty()) {
             if (user.getLeetcodeSolved() == null || user.getLeetcodeSolved() == 0) {
                 if ("lakshyajhunjhunwala".equalsIgnoreCase(user.getLeetcodeUsername()) || "lakshya".equalsIgnoreCase(user.getUsername())) {
@@ -207,11 +207,13 @@ public class UserService {
                     user.setLeetcodeBadges(1);
                 }
             }
-            totalExp += user.getLeetcodeSolved() * 10;
-            totalExp += user.getLeetcodeBadges() * 50;
+            // Flat 100 EXP for LeetCode questions solved
+            if ((user.getLeetcodeSolved() != null && user.getLeetcodeSolved() > 0) || Boolean.TRUE.equals(user.getLeetcodeVerified())) {
+                totalExp += 100;
+            }
         }
 
-        // CodeChef Stats & EXP
+        // CodeChef Stats & EXP: For every question solved in a CodeChef contest, 100 EXP each
         if (user.getCodechefUsername() != null && !user.getCodechefUsername().trim().isEmpty()) {
             if ("glee_mount_91".equalsIgnoreCase(user.getCodechefUsername()) || "lakshya".equalsIgnoreCase(user.getUsername())) {
                 user.setCodechefStars("1 Star(s)");
@@ -224,7 +226,8 @@ public class UserService {
                 user.setCodechefRating(1320);
                 user.setCodechefSolved(42);
             }
-            totalExp += 100; // Connected CodeChef EXP bonus
+            int ccContestSolved = (user.getCodechefSolved() != null && user.getCodechefSolved() > 0) ? user.getCodechefSolved() : 1;
+            totalExp += ccContestSolved * 100; // 100 EXP per question solved in CodeChef contest!
         }
 
         // Codeforces Stats & EXP
@@ -242,7 +245,7 @@ public class UserService {
             totalExp += 50; // Connected Codeforces EXP bonus
         }
 
-        // GeeksforGeeks Stats & EXP
+        // GeeksforGeeks Stats & EXP: GFG gets only 100 EXP total regardless of questions solved
         if (user.getGfgUsername() != null && !user.getGfgUsername().trim().isEmpty()) {
             if ("lakshyajhun3plt".equalsIgnoreCase(user.getGfgUsername()) || "lakshya".equalsIgnoreCase(user.getUsername())) {
                 user.setGfgRank(37);
@@ -253,8 +256,10 @@ public class UserService {
                 user.setGfgScore(40);
                 user.setGfgSolved(28);
             }
-            totalExp += (user.getGfgSolved() != null ? user.getGfgSolved() * 5 : 0);
-            totalExp += (user.getGfgScore() != null ? user.getGfgScore() * 2 : 0);
+            // Flat 100 EXP for GFG questions solved
+            if ((user.getGfgSolved() != null && user.getGfgSolved() > 0) || Boolean.TRUE.equals(user.getGfgVerified())) {
+                totalExp += 100;
+            }
         }
 
         // Dynamic metrics based on questions solved across platforms

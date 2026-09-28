@@ -1664,12 +1664,12 @@
                     </div>
                 </div>
 
-                <!-- Step 2: Paste in Bio -->
+                <!-- Step 2: Set in Profile Name -->
                 <div class="verify-step-card">
                     <div class="step-badge">2</div>
                     <div class="step-content">
-                        <h4>Paste the token into your profile bio</h4>
-                        <p id="verifyStepInstructions">Open your platform settings and paste this code anywhere inside your <strong>Bio / Summary / About Me</strong>, then save your changes on that platform.</p>
+                        <h4>Set the token as your Profile Name</h4>
+                        <p id="verifyStepInstructions">Open your platform settings and set your <strong>Display Name / First Name</strong> to this code, then save your changes on that platform. (You can revert it anytime after verification!)</p>
                         <a href="#" target="_blank" id="verifyPlatformDirectLink" class="direct-settings-link">
                             <i data-lucide="external-link"></i> Open Profile Settings
                         </a>
@@ -1680,18 +1680,18 @@
                 <div class="verify-step-card">
                     <div class="step-badge">3</div>
                     <div class="step-content">
-                        <h4>Scan bio & claim your Verified Badge</h4>
-                        <p>Our verification engine will inspect your public profile bio, confirm ownership, and award <strong>+100 EXP</strong>!</p>
+                        <h4>Verify Profile & claim EXP</h4>
+                        <p>Our verification engine will inspect your public profile, confirm ownership, and award EXP (100 EXP for LeetCode/GFG, or 100 EXP per CodeChef contest question)!</p>
                         
                         <div id="verifyStatusBox" class="verify-status-alert hidden">
-                            <span id="verifyStatusText">Inspecting public bio...</span>
+                            <span id="verifyStatusText">Inspecting public profile...</span>
                         </div>
 
                         <div class="verify-actions-row margin-top">
                             <button type="button" class="btn btn-primary" id="confirmBioVerificationBtn">
-                                <i data-lucide="shield-check"></i> Check Bio & Confirm
+                                <i data-lucide="shield-check"></i> Check Profile & Confirm
                             </button>
-                            <button type="button" class="btn btn-secondary" id="instantVerifyDemoBtn" title="Instant verification without modifying live bio">
+                            <button type="button" class="btn btn-secondary" id="instantVerifyDemoBtn" title="Instant verification without modifying live profile">
                                 <i data-lucide="zap"></i> Instant Verify (Demo)
                             </button>
                         </div>
@@ -1702,6 +1702,6 @@
     </div>
 
     <!-- Application Controller -->
-    <script src="app.js?v=2.6"></script>
+    <script src="app.js?v=2.7"></script>
 </body>
 </html>

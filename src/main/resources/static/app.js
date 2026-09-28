@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start Live Clock
     startClock();
 
+    // Start 24/7 Keep-Alive Heartbeat to prevent Render hibernation
+    startKeepAliveHeartbeat();
+
     // Load Public Hero Podium
     loadPublicHeroPodium();
 
@@ -37,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     handleHashRoute();
 });
 
-// 1. Live Header Clock
+// 1. Live Header Clock & Keep-Alive
 function startClock() {
     const clock = document.getElementById('liveTime');
     if (!clock) return;
@@ -46,6 +49,20 @@ function startClock() {
         const now = new Date();
         clock.textContent = now.toLocaleTimeString();
     }, 1000);
+}
+
+// Keep-Alive Heartbeat: pings every 4.5 minutes to ensure Render cloud server stays awake 24/7
+function startKeepAliveHeartbeat() {
+    // Initial ping to ensure warm connection
+    fetch(`${API_BASE}/users/leaderboard`, { method: 'GET', cache: 'no-store' }).catch(() => {});
+    
+    setInterval(() => {
+        fetch(`${API_BASE}/users/leaderboard`, { method: 'GET', cache: 'no-store' })
+            .then(res => {
+                if (res.ok) console.log("Render server keep-alive ping: OK");
+            })
+            .catch(() => {});
+    }, 4.5 * 60 * 1000);
 }
 
 // 2. Authentication & Shell Toggle Manager
@@ -96,35 +113,46 @@ function showPortalShell() {
     document.getElementById('portal-shell').classList.remove('hidden');
 }
 
-function loginUser(email, password) {
+async function loginUser(email, password, retryCount = 0) {
+    const maxRetries = 2;
     const submitBtn = document.querySelector('#loginForm button[type="submit"]');
-    const originalText = submitBtn ? submitBtn.innerHTML : 'Authenticate & Enter';
+    const originalText = 'Authenticate & Enter';
+    
     if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = 'Connecting to server...';
+        if (retryCount > 0) {
+            submitBtn.innerHTML = `<i data-lucide="loader" class="animate-spin"></i> Server warming up (${retryCount}/${maxRetries})...`;
+        } else {
+            submitBtn.innerHTML = `<i data-lucide="loader" class="animate-spin"></i> Authenticating...`;
+        }
+        if (window.lucide) window.lucide.createIcons();
     }
 
     const params = new URLSearchParams();
     params.append('email', email);
     params.append('password', password);
 
-    fetch(`${API_BASE}/users/login?${params.toString()}`, {
-        method: 'POST'
-    })
-    .then(async response => {
+    try {
+        const response = await fetch(`${API_BASE}/users/login?${params.toString()}`, {
+            method: 'POST'
+        });
+
         if (!response.ok) {
-            if (response.status === 429) {
-                throw new Error("Render cloud server is waking up from hibernation. Please wait ~10 seconds and try again!");
+            // If server is hibernating or throttling (429 or 5xx), retry seamlessly
+            if ((response.status === 429 || response.status >= 500) && retryCount < maxRetries) {
+                if (submitBtn) {
+                    submitBtn.innerHTML = `<i data-lucide="loader" class="animate-spin"></i> Connecting to cloud server (retrying in 3s)...`;
+                    if (window.lucide) window.lucide.createIcons();
+                }
+                await new Promise(r => setTimeout(r, 3000));
+                return loginUser(email, password, retryCount + 1);
             }
-            if (response.status >= 500) {
-                throw new Error("Server is currently warming up (Render free tier). Please wait a few seconds and try again.");
-            }
+
             const errData = await response.json().catch(() => ({}));
             throw new Error(errData.message || (response.status === 401 ? "Incorrect password. Passwords are case-sensitive." : "Authentication failed! Check credentials."));
         }
-        return response.json();
-    })
-    .then(user => {
+
+        const user = await response.json();
         currentUser = user;
         localStorage.setItem('medstellar_username', user.username);
         updateUIForLoggedInState();
@@ -141,17 +169,16 @@ function loginUser(email, password) {
         } else {
             window.location.hash = '#dashboard';
         }
-    })
-    .catch(err => {
+    } catch (err) {
         alert(err.message || "Authentication failed! Check credentials.");
         console.error(err);
-    })
-    .finally(() => {
+    } finally {
         if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
+            if (window.lucide) window.lucide.createIcons();
         }
-    });
+    }
 }
 
 function logout() {
@@ -1978,7 +2005,7 @@ const PLATFORM_VERIFY_CONFIGS = {
         badgeClass: 'leetcode-badge-logo',
         handleField: 'leetcodeUsername',
         settingsUrl: () => `https://leetcode.com/profile/`,
-        instructions: 'Open your LeetCode profile and paste this token into your <strong>About Me / Summary</strong> section, then click "Save".'
+        instructions: 'Open your LeetCode profile settings and change your <strong>Name (Display Name)</strong> to this token, then click "Save". (You can change it back anytime after verification!)'
     },
     codechef: {
         name: 'CodeChef',
@@ -1986,7 +2013,7 @@ const PLATFORM_VERIFY_CONFIGS = {
         badgeClass: 'codechef-badge-logo',
         handleField: 'codechefUsername',
         settingsUrl: (u) => u ? `https://www.codechef.com/users/${encodeURIComponent(u)}` : 'https://www.codechef.com',
-        instructions: 'Open your CodeChef profile and paste this token anywhere inside your <strong>About Me / Bio</strong> section, then save.'
+        instructions: 'Open your CodeChef profile edit page and set your <strong>Full Name / Display Name</strong> (or Bio) to this token, then save.'
     },
     codeforces: {
         name: 'Codeforces',
@@ -1994,7 +2021,7 @@ const PLATFORM_VERIFY_CONFIGS = {
         badgeClass: 'codeforces-badge-logo',
         handleField: 'codeforcesUsername',
         settingsUrl: () => 'https://codeforces.com/settings/social',
-        instructions: 'Open Codeforces Settings > Social and paste this token into your <strong>First Name / Last Name or Social bio</strong>, then click "Save Changes".'
+        instructions: 'Open Codeforces Settings > Social and paste this token into your <strong>First Name</strong> (or Last Name / Organization), then click "Save Changes".'
     },
     gfg: {
         name: 'GeeksforGeeks',
@@ -2002,7 +2029,7 @@ const PLATFORM_VERIFY_CONFIGS = {
         badgeClass: 'gfg-badge-logo',
         handleField: 'gfgUsername',
         settingsUrl: (u) => u ? `https://auth.geeksforgeeks.org/user/${encodeURIComponent(u)}/practice` : 'https://geeksforgeeks.org',
-        instructions: 'Open your GeeksforGeeks profile edit page and paste this token into your <strong>Bio</strong> field, then click "Save Changes".'
+        instructions: 'Open your GeeksforGeeks profile edit page and set your <strong>Name</strong> (or Bio) to this token, then click "Save Changes".'
     }
 };
 
@@ -2049,7 +2076,7 @@ function openVerifyModal(platform) {
     const confirmBtn = document.getElementById('confirmBioVerificationBtn');
     if (confirmBtn) {
         confirmBtn.disabled = false;
-        confirmBtn.innerHTML = '<i data-lucide="shield-check"></i> Check Bio & Confirm';
+        confirmBtn.innerHTML = '<i data-lucide="shield-check"></i> Check Profile & Confirm';
     }
 
     const instantBtn = document.getElementById('instantVerifyDemoBtn');
@@ -2147,7 +2174,7 @@ function submitPlatformVerification(demoBypass) {
         statusBox.classList.remove('hidden', 'error', 'success');
         statusText.innerHTML = demoBypass 
             ? '<i data-lucide="loader" class="animate-spin"></i> Performing instant demo verification...' 
-            : '<i data-lucide="loader" class="animate-spin"></i> Scanning public profile bio for verification token...';
+            : '<i data-lucide="loader" class="animate-spin"></i> Scanning public profile for verification token...';
         if (window.lucide) window.lucide.createIcons();
     }
 
@@ -2167,7 +2194,7 @@ function submitPlatformVerification(demoBypass) {
     .then(data => {
         if (confirmBtn) {
             confirmBtn.disabled = false;
-            confirmBtn.innerHTML = '<i data-lucide="shield-check"></i> Check Bio & Confirm';
+            confirmBtn.innerHTML = '<i data-lucide="shield-check"></i> Check Profile & Confirm';
         }
         if (instantBtn) {
             instantBtn.disabled = false;
@@ -2189,13 +2216,13 @@ function submitPlatformVerification(demoBypass) {
                 closeVerifyModal();
                 loadProfilePageData();
                 updateUIForLoggedInState();
-                alert(`🎉 Verification Successful!\n\n${data.message}\n+100 EXP has been added to your profile!`);
+                alert(`🎉 Verification Successful!\n\n${data.message}`);
             }, 1200);
         } else {
             if (statusBox && statusText) {
                 statusBox.classList.remove('success');
                 statusBox.classList.add('error');
-                statusText.innerHTML = `<i data-lucide="alert-triangle"></i> ${data.message || 'Token not detected. Please verify your bio is public and saved.'}`;
+                statusText.innerHTML = `<i data-lucide="alert-triangle"></i> ${data.message || 'Token not detected. Please verify your profile name is public and saved.'}`;
             }
             if (window.lucide) window.lucide.createIcons();
         }
@@ -2204,7 +2231,7 @@ function submitPlatformVerification(demoBypass) {
         console.error("Verification call failed:", err);
         if (confirmBtn) {
             confirmBtn.disabled = false;
-            confirmBtn.innerHTML = '<i data-lucide="shield-check"></i> Check Bio & Confirm';
+            confirmBtn.innerHTML = '<i data-lucide="shield-check"></i> Check Profile & Confirm';
         }
         if (instantBtn) {
             instantBtn.disabled = false;
@@ -2213,7 +2240,7 @@ function submitPlatformVerification(demoBypass) {
         if (statusBox && statusText) {
             statusBox.classList.remove('success');
             statusBox.classList.add('error');
-            statusText.textContent = "Network error during verification. Please try again.";
+            statusText.textContent = "Network error during verification. Please try again or use Instant Verify.";
         }
         if (window.lucide) window.lucide.createIcons();
     });

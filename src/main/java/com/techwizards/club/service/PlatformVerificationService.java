@@ -22,7 +22,7 @@ public class PlatformVerificationService {
     public PlatformVerificationService(UserRepository userRepository) {
         this.userRepository = userRepository;
         this.httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(4))
+                .connectTimeout(Duration.ofSeconds(10))
                 .followRedirects(HttpClient.Redirect.NORMAL)
                 .build();
     }
@@ -87,20 +87,19 @@ public class PlatformVerificationService {
         } else {
             try {
                 if ("leetcode".equals(p)) {
-                    verified = checkLeetCodeBio(handle, token);
+                    verified = checkLeetCodeProfile(handle, token);
                     platformName = "LeetCode";
                 } else if ("codeforces".equals(p)) {
-                    verified = checkCodeforcesBio(handle, token);
+                    verified = checkCodeforcesProfile(handle, token);
                     platformName = "Codeforces";
                 } else if ("codechef".equals(p)) {
-                    verified = checkUrlContainsToken("https://www.codechef.com/users/" + handle, token);
+                    verified = checkCodeChefProfile(handle, token);
                     platformName = "CodeChef";
                 } else if ("gfg".equals(p) || "geeksforgeeks".equals(p)) {
-                    verified = checkUrlContainsToken("https://auth.geeksforgeeks.org/user/" + handle + "/", token);
+                    verified = checkGfgProfile(handle, token);
                     platformName = "GeeksforGeeks";
                 }
             } catch (Exception e) {
-                // If external network call fails or times out, inform the user
                 System.err.println("Verification network check error: " + e.getMessage());
                 response.put("success", false);
                 response.put("message", "Could not reach " + platform + " servers (" + e.getMessage() + "). You can use Instant Verify for quick testing.");
@@ -126,70 +125,136 @@ public class PlatformVerificationService {
                     break;
             }
 
-            // Award +100 EXP verification reward bonus
-            user.setPoints(user.getPoints() + 100);
+            // EXP Calculation Rules:
+            // 1. GFG and LeetCode: Flat 100 EXP regardless of question count
+            // 2. CodeChef: For every question solved in CodeChef contests, 100 EXP each
+            int expAward = 100;
+            String expMsg = "+100 EXP awarded!";
+            if ("codechef".equals(p)) {
+                int solvedCount = (user.getCodechefSolved() != null && user.getCodechefSolved() > 0) ? user.getCodechefSolved() : 1;
+                expAward = solvedCount * 100;
+                expMsg = "+" + expAward + " EXP awarded (" + solvedCount + " contest question(s) x 100 EXP)!";
+            } else if ("leetcode".equals(p) || "gfg".equals(p) || "geeksforgeeks".equals(p)) {
+                expAward = 100;
+                expMsg = "+100 EXP awarded (flat platform reward)!";
+            }
+
+            user.setPoints(user.getPoints() + expAward);
             user.updateRank();
             User saved = userRepository.save(user);
 
             response.put("success", true);
-            response.put("message", "🎉 Ownership Verified! " + platformName + " handle @" + handle + " is now confirmed. +100 EXP awarded!");
+            response.put("message", "🎉 Ownership Verified! " + platformName + " handle @" + handle + " is now confirmed. " + expMsg);
             response.put("user", saved);
             return response;
         } else {
             response.put("success", false);
-            response.put("message", "Verification code '" + token + "' was not found in your " + platformName + " bio. Please paste the code into your bio/about section, save it, and try again.");
+            response.put("message", "Verification token '" + token + "' was not found in your " + platformName + " Profile Name (or Bio/Organization). Please set your " + platformName + " Profile Name to '" + token + "', save it, and try again.");
             return response;
         }
     }
 
-    private boolean checkLeetCodeBio(String handle, String token) {
+    private boolean checkLeetCodeProfile(String handle, String token) {
         try {
-            String graphqlQuery = "{\"query\":\"query getUserProfile($username: String!) { matchedUser(username: $username) { profile { aboutMe summary } } }\",\"variables\":{\"username\":\"" + handle + "\"}}";
+            // Check LeetCode public GraphQL user profile (realName, aboutMe, summary)
+            String graphqlQuery = "{\"query\":\"query getUserProfile($username: String!) { matchedUser(username: $username) { profile { realName aboutMe summary } } }\",\"variables\":{\"username\":\"" + handle + "\"}}";
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://leetcode.com/graphql"))
-                    .timeout(Duration.ofSeconds(4))
+                    .timeout(Duration.ofSeconds(8))
                     .header("Content-Type", "application/json")
-                    .header("User-Agent", "Mozilla/5.0")
+                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+                    .header("Referer", "https://leetcode.com/" + handle + "/")
                     .POST(HttpRequest.BodyPublishers.ofString(graphqlQuery))
                     .build();
 
             HttpResponse<String> resp = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (resp.statusCode() == 200 && resp.body() != null) {
-                return resp.body().contains(token);
+                if (resp.body().toLowerCase().contains(token.toLowerCase())) {
+                    return true;
+                }
+            }
+
+            // Fallback: check public mirrors
+            HttpRequest fallbackReq = HttpRequest.newBuilder()
+                    .uri(URI.create("https://alfa-leetcode-api.onrender.com/userProfile/" + handle))
+                    .timeout(Duration.ofSeconds(6))
+                    .header("User-Agent", "Mozilla/5.0")
+                    .GET()
+                    .build();
+            HttpResponse<String> fallbackResp = httpClient.send(fallbackReq, HttpResponse.BodyHandlers.ofString());
+            if (fallbackResp.statusCode() == 200 && fallbackResp.body() != null) {
+                return fallbackResp.body().toLowerCase().contains(token.toLowerCase());
             }
         } catch (Exception ignored) {}
         return false;
     }
 
-    private boolean checkCodeforcesBio(String handle, String token) {
+    private boolean checkCodeforcesProfile(String handle, String token) {
         try {
+            // Codeforces official user.info API returns firstName, lastName, organization
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://codeforces.com/api/user.info?handles=" + handle))
-                    .timeout(Duration.ofSeconds(4))
-                    .header("User-Agent", "Mozilla/5.0")
+                    .timeout(Duration.ofSeconds(8))
+                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
                     .GET()
                     .build();
 
             HttpResponse<String> resp = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (resp.statusCode() == 200 && resp.body() != null) {
-                return resp.body().contains(token);
+                return resp.body().toLowerCase().contains(token.toLowerCase());
             }
         } catch (Exception ignored) {}
         return false;
     }
 
-    private boolean checkUrlContainsToken(String urlStr, String token) {
+    private boolean checkCodeChefProfile(String handle, String token) {
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(urlStr))
-                    .timeout(Duration.ofSeconds(4))
-                    .header("User-Agent", "Mozilla/5.0")
-                    .GET()
-                    .build();
+            // Check CodeChef profile or CodeChef API mirror for display name / bio
+            String[] urls = {
+                "https://codechef-api.vercel.app/handle/" + handle,
+                "https://www.codechef.com/users/" + handle
+            };
+            for (String url : urls) {
+                try {
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .uri(URI.create(url))
+                            .timeout(Duration.ofSeconds(6))
+                            .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+                            .GET()
+                            .build();
 
-            HttpResponse<String> resp = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            if (resp.statusCode() == 200 && resp.body() != null) {
-                return resp.body().contains(token);
+                    HttpResponse<String> resp = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                    if (resp.statusCode() == 200 && resp.body() != null && resp.body().toLowerCase().contains(token.toLowerCase())) {
+                        return true;
+                    }
+                } catch (Exception ignored) {}
+            }
+        } catch (Exception ignored) {}
+        return false;
+    }
+
+    private boolean checkGfgProfile(String handle, String token) {
+        try {
+            // Check GeeksforGeeks practice profile or auth profile for name/bio
+            String[] urls = {
+                "https://auth.geeksforgeeks.org/user/" + handle + "/",
+                "https://www.geeksforgeeks.org/user/" + handle + "/",
+                "https://practiceapi.geeksforgeeks.org/api/v1/user/problems/submissions/" + handle + "/"
+            };
+            for (String url : urls) {
+                try {
+                    HttpRequest request = HttpRequest.newBuilder()
+                            .uri(URI.create(url))
+                            .timeout(Duration.ofSeconds(6))
+                            .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+                            .GET()
+                            .build();
+
+                    HttpResponse<String> resp = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                    if (resp.statusCode() == 200 && resp.body() != null && resp.body().toLowerCase().contains(token.toLowerCase())) {
+                        return true;
+                    }
+                } catch (Exception ignored) {}
             }
         } catch (Exception ignored) {}
         return false;

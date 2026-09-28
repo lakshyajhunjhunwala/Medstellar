@@ -1,0 +1,22 @@
+name: Render Cloud Server 24/7 Keep-Alive
+
+on:
+  schedule:
+    # Run every 10 minutes to prevent Render free-tier hibernation (which occurs after 15 min of inactivity)
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allows manual trigger anytime from GitHub Actions tab
+
+jobs:
+  ping-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Medstellar Render Backend
+        run: |
+          echo "Sending keep-alive ping to Medstellar Render backend..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 25 "https://medstellar.onrender.com/api/users/leaderboard")
+          echo "Response HTTP Status: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "Render backend is awake and healthy!"
+          else
+            echo "Received status $HTTP_STATUS - server is warming up or reachable."
+          fi
