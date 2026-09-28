@@ -9,9 +9,17 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class PlatformVerificationService {
@@ -259,5 +267,174 @@ public class PlatformVerificationService {
             System.err.println("GFG check error: " + e.getMessage());
         }
         return false;
+    }
+
+    /**
+     * Checks CodeChef recent submissions for problems solved in a contest on a particular day.
+     * Only counts unique accepted problems belonging to a contest on that date.
+     */
+    public int getCodechefContestSolvedOnDate(String handle, LocalDate date) {
+        if (handle == null || handle.trim().isEmpty()) return 0;
+        try {
+            String cleanHandle = handle.trim();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://www.codechef.com/recent/user?page=0&user_handle=" + cleanHandle))
+                    .timeout(Duration.ofSeconds(10))
+                    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> resp = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (resp.statusCode() != 200 || resp.body() == null) return 0;
+
+            String body = resp.body();
+            Pattern trPattern = Pattern.compile("<tr\\s*>(.*?)</tr>", Pattern.DOTALL);
+            Matcher trMatcher = trPattern.matcher(body);
+
+            Set<String> uniqueContestProblems = new HashSet<>();
+            String dateFormatted = date.format(DateTimeFormatter.ofPattern("dd/MM/yy"));
+
+            Pattern timePattern = Pattern.compile("title='([^']+)'");
+            Pattern hrefPattern = Pattern.compile("href='([^']+)'");
+            Pattern statusPattern = Pattern.compile("title='([^']+)'style=");
+            Pattern scorePattern = Pattern.compile("\\(([0-9]+)\\)");
+            Pattern contestUrlPattern = Pattern.compile("^/([^/]+)/problems/([^/]+)$");
+
+            while (trMatcher.find()) {
+                String row = trMatcher.group(1);
+
+                Matcher mTime = timePattern.matcher(row);
+                Matcher mHref = hrefPattern.matcher(row);
+                if (!mTime.find() || !mHref.find()) continue;
+
+                String timeStr = mTime.group(1).trim();
+                String hrefStr = mHref.group(1).trim().replace("\\/", "/");
+
+                Matcher mStatus = statusPattern.matcher(row);
+                String statusStr = mStatus.find() ? mStatus.group(1).trim().toLowerCase() : "";
+
+                Matcher mScore = scorePattern.matcher(row);
+                int scoreVal = mScore.find() ? Integer.parseInt(mScore.group(1)) : 0;
+
+                boolean isAccepted = (scoreVal == 100) || (statusStr.contains("accepted") && !statusStr.contains("partially"));
+                if (!isAccepted) continue;
+
+                Matcher mContest = contestUrlPattern.matcher(hrefStr);
+                if (!mContest.find()) continue;
+
+                String contestCode = mContest.group(1).toUpperCase();
+                String problemCode = mContest.group(2).toUpperCase();
+                if ("PROBLEMS".equals(contestCode) || "PRACTICE".equals(contestCode) || "SUBMIT".equals(contestCode)) {
+                    continue;
+                }
+
+                boolean isToday = false;
+                if (timeStr.contains("sec ago") || timeStr.contains("min ago")) {
+                    isToday = true;
+                } else if (timeStr.contains("hour ago") || timeStr.contains("hours ago")) {
+                    try {
+                        Matcher digitMatcher = Pattern.compile("(\\d+)").matcher(timeStr);
+                        if (digitMatcher.find() && Integer.parseInt(digitMatcher.group(1)) < 24) {
+                            isToday = true;
+                        }
+                    } catch (Exception ignored) {
+                        isToday = true;
+                    }
+                } else if (timeStr.contains(dateFormatted)) {
+                    isToday = true;
+                }
+
+                if (isToday) {
+                    uniqueContestProblems.add(contestCode + ":" + problemCode);
+                }
+            }
+
+            return uniqueContestProblems.size();
+        } catch (Exception e) {
+            System.err.println("Error fetching CodeChef daily contest activity for @" + handle + ": " + e.getMessage());
+            return 0;
+        }
+    }
+
+    /**
+     * Checks if user has solved any questions on LeetCode on a particular date.
+     */
+    public boolean hasLeetcodeSolvedOnDate(String handle, LocalDate date) {
+        if (handle == null || handle.trim().isEmpty()) return false;
+        try {
+            String cleanHandle = handle.trim();
+            String graphqlQuery = "{\"query\":\"query recentSubmissions($username: String!) { recentSubmissionList(username: $username, limit: 15) { title timestamp statusDisplay } }\",\"variables\":{\"username\":\"" + cleanHandle + "\"}}";
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://leetcode.com/graphql"))
+                    .timeout(Duration.ofSeconds(10))
+                    .header("Content-Type", "application/json")
+                    .header("User-Agent", "Mozilla/5.0")
+                    .POST(HttpRequest.BodyPublishers.ofString(graphqlQuery))
+                    .build();
+
+            HttpResponse<String> resp = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (resp.statusCode() != 200 || resp.body() == null) return false;
+
+            String body = resp.body();
+            Pattern subPattern = Pattern.compile("\"timestamp\":\"?(\\d+)\"?.*?\"statusDisplay\":\"([^\"]+)\"");
+            Matcher m = subPattern.matcher(body);
+
+            ZoneId zone = ZoneId.of("Asia/Kolkata");
+            while (m.find()) {
+                long ts = Long.parseLong(m.group(1));
+                String status = m.group(2);
+                if ("Accepted".equalsIgnoreCase(status)) {
+                    LocalDate subDate = Instant.ofEpochSecond(ts).atZone(zone).toLocalDate();
+                    if (date.equals(subDate)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            System.err.println("Error checking LeetCode daily solved for @" + handle + ": " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Checks Codeforces submissions solved on a particular date.
+     */
+    public int getCodeforcesSolvedOnDate(String handle, LocalDate date) {
+        if (handle == null || handle.trim().isEmpty()) return 0;
+        try {
+            String cleanHandle = handle.trim();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://codeforces.com/api/user.status?handle=" + cleanHandle + "&from=1&count=20"))
+                    .timeout(Duration.ofSeconds(10))
+                    .header("User-Agent", "Mozilla/5.0")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> resp = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (resp.statusCode() != 200 || resp.body() == null) return 0;
+
+            String body = resp.body();
+            Pattern subPattern = Pattern.compile("\"creationTimeSeconds\":(\\d+).*?\"verdict\":\"([^\"]+)\"");
+            Matcher m = subPattern.matcher(body);
+
+            ZoneId zone = ZoneId.of("Asia/Kolkata");
+            int solvedCount = 0;
+            while (m.find()) {
+                long ts = Long.parseLong(m.group(1));
+                String verdict = m.group(2);
+                if ("OK".equalsIgnoreCase(verdict)) {
+                    LocalDate subDate = Instant.ofEpochSecond(ts).atZone(zone).toLocalDate();
+                    if (date.equals(subDate)) {
+                        solvedCount++;
+                    }
+                }
+            }
+            return solvedCount;
+        } catch (Exception e) {
+            System.err.println("Error checking Codeforces daily solved for @" + handle + ": " + e.getMessage());
+            return 0;
+        }
     }
 }

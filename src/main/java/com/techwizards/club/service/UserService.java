@@ -22,13 +22,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final AnnouncementRepository announcementRepository;
     private final SecurityLogRepository securityLogRepository;
+    private final PlatformVerificationService platformVerificationService;
 
     public UserService(UserRepository userRepository,
                        AnnouncementRepository announcementRepository,
-                       SecurityLogRepository securityLogRepository) {
+                       SecurityLogRepository securityLogRepository,
+                       PlatformVerificationService platformVerificationService) {
         this.userRepository = userRepository;
         this.announcementRepository = announcementRepository;
         this.securityLogRepository = securityLogRepository;
+        this.platformVerificationService = platformVerificationService;
     }
 
     public User loginWithEmail(String emailOrUsername, String password) {
@@ -424,11 +427,11 @@ public class UserService {
     }
 
     // End-of-the-day Batch Check & EXP Awarding Job:
-    // Awards EXP according to club rules:
-    // 1. LeetCode verified: flat 100 EXP
-    // 2. GFG verified: flat 100 EXP
-    // 3. CodeChef verified: 100 EXP per question solved in contests
-    // 4. Codeforces verified: 50 EXP baseline + solved EXP
+    // Queries live platform APIs to check TODAY's activity for each verified member:
+    // 1. LeetCode verified: 100 EXP if they solved ANY question today
+    // 2. GFG verified: 100 EXP (flat - GFG has no public daily submission API, awarded for maintaining verification)
+    // 3. CodeChef verified: 100 EXP per UNIQUE question solved in a CONTEST today
+    // 4. Codeforces verified: 50 EXP baseline + 10 EXP per question solved today
     public Map<String, Object> processDailyPlatformExp(boolean force) {
         List<User> users = userRepository.findAll();
         LocalDate today = LocalDate.now();
@@ -444,32 +447,53 @@ public class UserService {
             int dailyExp = 0;
             List<String> breakdownParts = new ArrayList<>();
 
-            // 1. LeetCode: Flat 100 EXP
-            if (Boolean.TRUE.equals(user.getLeetcodeVerified()) && user.getLeetcodeUsername() != null && !user.getLeetcodeUsername().trim().isEmpty()) {
-                dailyExp += 100;
-                breakdownParts.add("LeetCode (+100 EXP)");
+            // 1. LeetCode: 100 EXP if they solved at least one question today
+            if (Boolean.TRUE.equals(user.getLeetcodeVerified())
+                    && user.getLeetcodeUsername() != null
+                    && !user.getLeetcodeUsername().trim().isEmpty()) {
+                boolean solvedToday = platformVerificationService.hasLeetcodeSolvedOnDate(
+                        user.getLeetcodeUsername(), today);
+                if (solvedToday) {
+                    dailyExp += 100;
+                    breakdownParts.add("LeetCode (+100 EXP for solving today)");
+                } else {
+                    breakdownParts.add("LeetCode (0 EXP – no questions solved today)");
+                }
             }
 
-            // 2. GeeksforGeeks: Flat 100 EXP
-            if (Boolean.TRUE.equals(user.getGfgVerified()) && user.getGfgUsername() != null && !user.getGfgUsername().trim().isEmpty()) {
+            // 2. GeeksforGeeks: Flat 100 EXP for maintaining verified status
+            // (GFG does not expose a public daily submission API)
+            if (Boolean.TRUE.equals(user.getGfgVerified())
+                    && user.getGfgUsername() != null
+                    && !user.getGfgUsername().trim().isEmpty()) {
                 dailyExp += 100;
                 breakdownParts.add("GeeksforGeeks (+100 EXP)");
             }
 
-            // 3. CodeChef: 100 EXP per contest question solved
-            if (Boolean.TRUE.equals(user.getCodechefVerified()) && user.getCodechefUsername() != null && !user.getCodechefUsername().trim().isEmpty()) {
-                int contestSolved = (user.getCodechefSolved() != null && user.getCodechefSolved() > 0) ? user.getCodechefSolved() : 1;
-                int ccExp = contestSolved * 100;
-                dailyExp += ccExp;
-                breakdownParts.add("CodeChef (" + contestSolved + " contest solved x 100 = +" + ccExp + " EXP)");
+            // 3. CodeChef: 100 EXP per UNIQUE contest question solved TODAY
+            if (Boolean.TRUE.equals(user.getCodechefVerified())
+                    && user.getCodechefUsername() != null
+                    && !user.getCodechefUsername().trim().isEmpty()) {
+                int contestSolvedToday = platformVerificationService.getCodechefContestSolvedOnDate(
+                        user.getCodechefUsername(), today);
+                if (contestSolvedToday > 0) {
+                    int ccExp = contestSolvedToday * 100;
+                    dailyExp += ccExp;
+                    breakdownParts.add("CodeChef (" + contestSolvedToday + " contest question(s) solved today x 100 = +" + ccExp + " EXP)");
+                } else {
+                    breakdownParts.add("CodeChef (0 EXP – no contest questions solved today)");
+                }
             }
 
-            // 4. Codeforces: 50 EXP baseline + solved
-            if (Boolean.TRUE.equals(user.getCodeforcesVerified()) && user.getCodeforcesUsername() != null && !user.getCodeforcesUsername().trim().isEmpty()) {
-                int cfSolved = (user.getCodeforcesSolved() != null ? user.getCodeforcesSolved() * 10 : 0);
-                int cfExp = 50 + cfSolved;
+            // 4. Codeforces: 50 EXP baseline + 10 EXP per question solved today
+            if (Boolean.TRUE.equals(user.getCodeforcesVerified())
+                    && user.getCodeforcesUsername() != null
+                    && !user.getCodeforcesUsername().trim().isEmpty()) {
+                int cfSolvedToday = platformVerificationService.getCodeforcesSolvedOnDate(
+                        user.getCodeforcesUsername(), today);
+                int cfExp = 50 + (cfSolvedToday * 10);
                 dailyExp += cfExp;
-                breakdownParts.add("Codeforces (+" + cfExp + " EXP)");
+                breakdownParts.add("Codeforces (" + cfSolvedToday + " solved today, +" + cfExp + " EXP)");
             }
 
             if (dailyExp > 0) {
