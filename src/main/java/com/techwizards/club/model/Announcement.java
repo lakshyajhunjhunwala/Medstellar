@@ -1,6 +1,7 @@
 package com.techwizards.club.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,6 +20,7 @@ public class Announcement {
     private String tag = "ANNOUNCEMENT"; // PINNED, NOTICE, EVENT, ANNOUNCEMENT
     private String author = "Lakshya (Lead)";
     private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDate eventDate;
 
     public Announcement() {}
 
@@ -76,5 +78,13 @@ public class Announcement {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public LocalDate getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(LocalDate eventDate) {
+        this.eventDate = eventDate;
     }
 }

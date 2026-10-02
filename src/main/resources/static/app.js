@@ -487,6 +487,7 @@ function loadDashboardData() {
         // Render Leaderboard & Activity Calendar
         loadLeaderboard();
         renderActivityCalendar();
+        loadDashboardCalendarEvents();
     });
 }
 
@@ -682,15 +683,32 @@ function loadLeaderboardPageData() {
     .catch(err => console.error("Error loading leaderboard page data:", err));
 }
 
-function renderActivityCalendar() {
+function renderActivityCalendar(events = []) {
     const grid = document.getElementById('calendarDaysGrid');
     if (!grid) return;
     grid.innerHTML = '';
-    
-    const startDayOffset = 3; // July 2026 starts on Wednesday
-    const totalDays = 31;
-    const todayNum = 26;
-    const activeDays = [5, 8, 12, 15, 19, 22, 25, todayNum];
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const todayNum = now.getDate();
+    const startDayOffset = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    const monthTitle = document.getElementById('calendarMonthTitle');
+    if (monthTitle) {
+        monthTitle.textContent = now.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+    }
+
+    const eventsByDate = new Map();
+    events.filter(event => event.tag === 'EVENT' && event.eventDate).forEach(event => {
+        eventsByDate.set(event.eventDate, [...(eventsByDate.get(event.eventDate) || []), event.title]);
+    });
+    const activeDays = new Set();
+    const streakStart = Math.max(1, todayNum - Math.max(1, currentUser?.streak || 1) + 1);
+    for (let day = streakStart; day <= todayNum; day++) activeDays.add(day);
+
+    const addEventBtn = document.getElementById('calendarAddEventBtn');
+    if (addEventBtn) addEventBtn.style.display = isCurrentUserAdmin() ? 'inline-flex' : 'none';
     
     for (let i = 0; i < startDayOffset; i++) {
         const emptyCell = document.createElement('div');
@@ -706,11 +724,23 @@ function renderActivityCalendar() {
         if (day === todayNum) {
             cell.classList.add('today');
         }
-        if (activeDays.includes(day)) {
+        if (activeDays.has(day)) {
             cell.classList.add('active');
+        }
+        const eventDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        if (eventsByDate.has(eventDate)) {
+            cell.classList.add('has-event');
+            cell.title = eventsByDate.get(eventDate).join(', ');
         }
         grid.appendChild(cell);
     }
+}
+
+function loadDashboardCalendarEvents() {
+    fetch(`${API_BASE}/users/announcements`)
+        .then(res => res.json())
+        .then(announcements => renderActivityCalendar(announcements))
+        .catch(err => console.error('Error loading calendar events:', err));
 }
 
 // B. Quizzes Engine
@@ -1487,6 +1517,16 @@ function setupEventHandlers() {
     const openAddAnnounceBtn = document.getElementById('openAddAnnouncementBtn');
     if (openAddAnnounceBtn) openAddAnnounceBtn.addEventListener('click', openAnnouncementModal);
 
+    const calendarAddEventBtn = document.getElementById('calendarAddEventBtn');
+    if (calendarAddEventBtn) {
+        calendarAddEventBtn.addEventListener('click', () => {
+            if (isCurrentUserAdmin()) openAnnouncementModal(true);
+        });
+    }
+
+    const announcementTag = document.getElementById('newAnnounceTag');
+    if (announcementTag) announcementTag.addEventListener('change', updateAnnouncementEventDateField);
+
     const closeAddAnnounceBtn = document.getElementById('closeAnnouncementModalBtn');
     if (closeAddAnnounceBtn) closeAddAnnounceBtn.addEventListener('click', closeAnnouncementModal);
 
@@ -1716,9 +1756,15 @@ function renderProfileCalendar(user) {
 
     const totalCareerSolved = lcSolved + ccSolved + cfSolved + gfgSolved;
 
-    // Calendar for September 2026 (Starts on Tuesday, offset 2, 30 days)
-    const firstDayOffset = 2;
-    const totalDaysInMonth = 30;
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const firstDayOffset = new Date(year, month, 1).getDay();
+    const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
+    const monthTitle = document.getElementById('profileCalendarMonthTitle');
+    if (monthTitle) {
+        monthTitle.textContent = `${now.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })} Activity`;
+    }
 
     // Lead-in empty cells
     for (let i = 0; i < firstDayOffset; i++) {
@@ -1733,8 +1779,8 @@ function renderProfileCalendar(user) {
     const avgElem = document.getElementById('profileCalAvgSolved');
 
     // Case 1: No linked platform activity or 0 solves
-    const now = new Date();
-    const currentDay = Math.min(totalDaysInMonth, now.getDate() || 15);
+    const currentDay = now.getDate();
+    const monthShort = now.toLocaleDateString(undefined, { month: 'short' });
 
     if (totalCareerSolved === 0) {
         for (let day = 1; day <= totalDaysInMonth; day++) {
@@ -1744,9 +1790,9 @@ function renderProfileCalendar(user) {
             if (day > currentDay) {
                 cell.classList.add('future-day');
                 cell.style.opacity = '0.3';
-                cell.title = `Sept ${day}: Upcoming (No activity yet)`;
+                cell.title = `${monthShort} ${day}: Upcoming (No activity yet)`;
             } else {
-                cell.title = `Sept ${day}: 0 questions solved (No linked platform activity)`;
+                cell.title = `${monthShort} ${day}: 0 questions solved (No linked platform activity)`;
             }
             grid.appendChild(cell);
         }
@@ -1843,14 +1889,14 @@ function renderProfileCalendar(user) {
             // Future day: strictly 0 solves, upcoming indicator
             cell.className = 'heat-cell heat-lvl-0 future-day';
             cell.style.opacity = '0.3';
-            cell.title = `Sept ${day}: Upcoming (No activity yet)`;
+            cell.title = `${monthShort} ${day}: Upcoming (No activity yet)`;
         } else {
             cell.className = `heat-cell heat-lvl-${lvl}`;
             if (count === 0) {
-                cell.title = `Sept ${day}: No questions solved`;
+                cell.title = `${monthShort} ${day}: No questions solved`;
             } else {
                 const breakdownParts = Object.entries(dayData.breakdown).map(([plat, num]) => `${plat}: ${num}`);
-                cell.title = `Sept ${day}: ${count} question${count > 1 ? 's' : ''} solved (${breakdownParts.join(', ')})`;
+                cell.title = `${monthShort} ${day}: ${count} question${count > 1 ? 's' : ''} solved (${breakdownParts.join(', ')})`;
             }
         }
         grid.appendChild(cell);
@@ -1872,12 +1918,7 @@ function loadAnnouncementsFeed() {
     // Show add button if Admin
     const addBtn = document.getElementById('openAddAnnouncementBtn');
     if (addBtn) {
-        const isAdmin = currentUser && (
-            currentUser.role === 'ADMIN' || 
-            currentUser.admin === true || 
-            (currentUser.username && currentUser.username.toLowerCase() === 'lakshya')
-        );
-        addBtn.style.display = isAdmin ? 'inline-flex' : 'none';
+        addBtn.style.display = isCurrentUserAdmin() ? 'inline-flex' : 'none';
     }
 
     fetch(`${API_BASE}/users/announcements`)
@@ -1908,6 +1949,14 @@ function loadAnnouncementsFeed() {
             });
         })
         .catch(err => console.error("Error loading announcements:", err));
+}
+
+function isCurrentUserAdmin() {
+    return Boolean(currentUser && (
+        currentUser.role === 'ADMIN' ||
+        currentUser.admin === true ||
+        (currentUser.username && currentUser.username.toLowerCase() === 'lakshya')
+    ));
 }
 
 function syncAllPlatforms() {
@@ -2031,14 +2080,28 @@ function handleProfileUpdate(e) {
     });
 }
 
-function openAnnouncementModal() {
+function openAnnouncementModal(isCalendarEvent = false) {
     document.getElementById('newAnnouncementForm').reset();
+    if (isCalendarEvent) {
+        document.getElementById('newAnnounceTag').value = 'EVENT';
+        const today = new Date();
+        document.getElementById('newAnnounceEventDate').value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    }
+    updateAnnouncementEventDateField();
     const modal = document.getElementById('announcementModal');
     if (modal) {
         modal.classList.remove('hidden');
         modal.classList.add('active');
     }
     if (window.lucide) window.lucide.createIcons();
+}
+
+function updateAnnouncementEventDateField() {
+    const isEvent = document.getElementById('newAnnounceTag').value === 'EVENT';
+    const dateGroup = document.getElementById('announcementEventDateGroup');
+    const dateInput = document.getElementById('newAnnounceEventDate');
+    dateGroup.classList.toggle('hidden', !isEvent);
+    dateInput.required = isEvent;
 }
 
 function closeAnnouncementModal() {
@@ -2056,6 +2119,7 @@ function handleAnnouncementSubmit(e) {
     const title = document.getElementById('newAnnounceTitle').value.trim();
     const tag = document.getElementById('newAnnounceTag').value;
     const content = document.getElementById('newAnnounceContent').value.trim();
+    const eventDate = document.getElementById('newAnnounceEventDate').value;
 
     if (!title || !content) return;
 
@@ -2065,6 +2129,7 @@ function handleAnnouncementSubmit(e) {
         content: content,
         author: currentUser.fullName ? `${currentUser.fullName} (${currentUser.role})` : currentUser.username
     };
+    if (tag === 'EVENT') payload.eventDate = eventDate;
 
     fetch(`${API_BASE}/users/announcements`, {
         method: 'POST',
@@ -2078,6 +2143,7 @@ function handleAnnouncementSubmit(e) {
     .then(() => {
         closeAnnouncementModal();
         loadAnnouncementsFeed();
+        loadDashboardCalendarEvents();
         alert("Announcement published successfully!");
     })
     .catch(err => {

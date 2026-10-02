@@ -461,10 +461,10 @@
                                 <div class="card-header justify-between">
                                     <div class="flex-align">
                                         <i data-lucide="calendar"></i>
-                                        <h3 id="calendarMonthTitle">July 2026</h3>
+                                        <h3 id="calendarMonthTitle">Activity Calendar</h3>
                                     </div>
                                     <div class="calendar-header-actions">
-                                        <button class="btn btn-secondary btn-sm" id="calendarAddEventBtn"><i data-lucide="plus" style="width:12px;"></i> Add Event</button>
+                                        <button class="btn btn-secondary btn-sm" id="calendarAddEventBtn" style="display:none;"><i data-lucide="plus" style="width:12px;"></i> Add Event</button>
                                         <div class="calendar-tabs">
                                             <span class="cal-tab active">Month</span>
                                             <span class="cal-tab">Today</span>
@@ -740,7 +740,7 @@
                                         <div class="flex-align">
                                             <i data-lucide="calendar" class="text-cyan"></i>
                                             <div>
-                                                <h3 id="profileCalendarMonthTitle">September 2026 Activity</h3>
+                                                <h3 id="profileCalendarMonthTitle">Activity</h3>
                                                 <p class="card-subtext">Monthly problem solving frequency</p>
                                             </div>
                                         </div>
@@ -1642,6 +1642,10 @@
                         <option value="SECURITY">SECURITY</option>
                         <option value="ANNOUNCEMENT" selected>ANNOUNCEMENT</option>
                     </select>
+                </div>
+                <div class="form-group hidden" id="announcementEventDateGroup">
+                    <label for="newAnnounceEventDate">Event Date</label>
+                    <input type="date" id="newAnnounceEventDate">
                 </div>
                 <div class="form-group">
                     <label for="newAnnounceContent">Message Content</label>

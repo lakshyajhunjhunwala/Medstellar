@@ -6,6 +6,8 @@ import com.techwizards.club.model.User;
 import com.techwizards.club.repository.AnnouncementRepository;
 import com.techwizards.club.repository.SecurityLogRepository;
 import com.techwizards.club.repository.UserRepository;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -296,12 +298,8 @@ public class UserService {
             user.setLastSolvedDate(today);
         }
 
-        // Apply updated points (keep any accumulated points if greater)
-        if (totalExp > 0) {
-            user.setPoints(Math.max(user.getPoints() + 35, totalExp));
-        } else {
-            user.setPoints(user.getPoints() + 35);
-        }
+        // Award sync XP incrementally so lifetime platform totals do not undo monthly resets.
+        user.setPoints((user.getPoints() != null ? user.getPoints() : 0) + 35);
 
         user.updateRank();
         return Optional.of(userRepository.save(user));
@@ -518,6 +516,38 @@ public class UserService {
         result.put("totalExpDistributed", totalExpDistributed);
         result.put("date", today.toString());
         return result;
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void resetMonthlyPointsOnStartup() {
+        applyMonthlyPointsReset();
+    }
+
+    @Scheduled(cron = "0 0 0 1 * *")
+    public void scheduledMonthlyPointsReset() {
+        applyMonthlyPointsReset();
+    }
+
+    private void applyMonthlyPointsReset() {
+        LocalDate monthStart = LocalDate.now().withDayOfMonth(1);
+        List<User> users = userRepository.findAll();
+        boolean changed = false;
+
+        for (User user : users) {
+            LocalDate lastResetMonth = user.getPointsResetMonth();
+            if (lastResetMonth == null) {
+                user.setPointsResetMonth(monthStart);
+                changed = true;
+            } else if (lastResetMonth.isBefore(monthStart)) {
+                user.setPoints(0);
+                user.setPointsResetMonth(monthStart);
+                changed = true;
+            }
+        }
+
+        if (changed) {
+            userRepository.saveAll(users);
+        }
     }
 
     // Automated end-of-the-day scheduled job (runs every day at 23:55)
