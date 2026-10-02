@@ -71,6 +71,7 @@ public class User {
     private LocalDate lastExpAwardDate;
     private String lastDailyExpBreakdown = "";
     private LocalDate pointsResetMonth = LocalDate.now().withDayOfMonth(1);
+    private Integer pointsResetVersion = 1;
 
     // Membership Approval Status: "APPROVED", "PENDING", "REJECTED"
     private String approvalStatus = "APPROVED";
@@ -459,6 +460,14 @@ public class User {
 
     public void setPointsResetMonth(LocalDate pointsResetMonth) {
         this.pointsResetMonth = pointsResetMonth;
+    }
+
+    public Integer getPointsResetVersion() {
+        return pointsResetVersion;
+    }
+
+    public void setPointsResetVersion(Integer pointsResetVersion) {
+        this.pointsResetVersion = pointsResetVersion;
     }
 
     // Helper method to automatically calculate and update user rank based on points

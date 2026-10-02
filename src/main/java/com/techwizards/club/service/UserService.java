@@ -200,10 +200,9 @@ public class UserService {
 
         User user = userOpt.get();
 
-        // Calculate platform activity stats
-        int totalExp = 0;
+        // Refresh platform activity stats
 
-        // LeetCode Stats & EXP: GFG and LeetCode get only 100 EXP total regardless of questions solved
+        // LeetCode Stats
         if (user.getLeetcodeUsername() != null && !user.getLeetcodeUsername().trim().isEmpty()) {
             if (user.getLeetcodeSolved() == null || user.getLeetcodeSolved() == 0) {
                 if ("lakshyajhunjhunwala".equalsIgnoreCase(user.getLeetcodeUsername()) || "lakshya".equalsIgnoreCase(user.getUsername())) {
@@ -216,13 +215,9 @@ public class UserService {
                     user.setLeetcodeBadges(1);
                 }
             }
-            // Flat 100 EXP for LeetCode questions solved
-            if ((user.getLeetcodeSolved() != null && user.getLeetcodeSolved() > 0) || Boolean.TRUE.equals(user.getLeetcodeVerified())) {
-                totalExp += 100;
-            }
         }
 
-        // CodeChef Stats & EXP: For every question solved in a CodeChef contest, 100 EXP each
+        // CodeChef Stats
         if (user.getCodechefUsername() != null && !user.getCodechefUsername().trim().isEmpty()) {
             if ("glee_mount_91".equalsIgnoreCase(user.getCodechefUsername()) || "lakshya".equalsIgnoreCase(user.getUsername())) {
                 user.setCodechefStars("1 Star(s)");
@@ -235,11 +230,9 @@ public class UserService {
                 user.setCodechefRating(1320);
                 user.setCodechefSolved(42);
             }
-            int ccContestSolved = (user.getCodechefSolved() != null && user.getCodechefSolved() > 0) ? user.getCodechefSolved() : 1;
-            totalExp += ccContestSolved * 100; // 100 EXP per question solved in CodeChef contest!
         }
 
-        // Codeforces Stats & EXP
+        // Codeforces Stats
         if (user.getCodeforcesUsername() != null && !user.getCodeforcesUsername().trim().isEmpty()) {
             if ("lakshya9830".equalsIgnoreCase(user.getCodeforcesUsername()) || "lakshya".equalsIgnoreCase(user.getUsername())) {
                 user.setCodeforcesRating(0);
@@ -250,11 +243,9 @@ public class UserService {
                 user.setCodeforcesRank("newbie");
                 user.setCodeforcesSolved(12);
             }
-            totalExp += (user.getCodeforcesSolved() != null ? user.getCodeforcesSolved() * 10 : 0);
-            totalExp += 50; // Connected Codeforces EXP bonus
         }
 
-        // GeeksforGeeks Stats & EXP: GFG gets only 100 EXP total regardless of questions solved
+        // GeeksforGeeks Stats
         if (user.getGfgUsername() != null && !user.getGfgUsername().trim().isEmpty()) {
             if ("lakshyajhun3plt".equalsIgnoreCase(user.getGfgUsername()) || "lakshya".equalsIgnoreCase(user.getUsername())) {
                 user.setGfgRank(37);
@@ -264,10 +255,6 @@ public class UserService {
                 user.setGfgRank(89);
                 user.setGfgScore(40);
                 user.setGfgSolved(28);
-            }
-            // Flat 100 EXP for GFG questions solved
-            if ((user.getGfgSolved() != null && user.getGfgSolved() > 0) || Boolean.TRUE.equals(user.getGfgVerified())) {
-                totalExp += 100;
             }
         }
 
@@ -535,10 +522,13 @@ public class UserService {
 
         for (User user : users) {
             LocalDate lastResetMonth = user.getPointsResetMonth();
-            if (lastResetMonth == null) {
+            Integer resetVersion = user.getPointsResetVersion();
+            if (resetVersion == null || resetVersion < 1) {
+                user.setPoints(0);
                 user.setPointsResetMonth(monthStart);
+                user.setPointsResetVersion(1);
                 changed = true;
-            } else if (lastResetMonth.isBefore(monthStart)) {
+            } else if (lastResetMonth == null || lastResetMonth.isBefore(monthStart)) {
                 user.setPoints(0);
                 user.setPointsResetMonth(monthStart);
                 changed = true;

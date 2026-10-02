@@ -180,7 +180,7 @@ public class DatabaseSeeder implements CommandLineRunner {
             user4.setStatusEmoji("🤩");
             user4.setBio("Core Member & Competitive Programmer @ MEDSTELLAR. Passionate about DSA, Web Systems, and Open Source.");
             user4.setAvatarUrl("https://api.dicebear.com/7.x/bottts/svg?seed=Lakshya");
-            user4.setPoints(1382);
+            user4.setPoints(0);
             user4.setStreak(3);
             user4.setGithubUsername("lakshya-codes");
             user4.setLeetcodeUsername("lakshyajhunjhunwala");
@@ -203,7 +203,7 @@ public class DatabaseSeeder implements CommandLineRunner {
             user4.setPreviousRank(19);
             user4.setMaxSolvedDay(2);
             user4.setAvgSolvedDay(0.29);
-            user4.setRankName("Grandmaster");
+            user4.setRankName("Novice");
             user4.setLeetcodeVerified(true);
             user4.setCodechefVerified(true);
             user4.setCodeforcesVerified(true);
