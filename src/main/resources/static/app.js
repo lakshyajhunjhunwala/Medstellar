@@ -609,6 +609,27 @@ function populatePerformersMedalList(users) {
     });
 }
 
+function getRoleBadgeInfo(rawRole, username) {
+    if (username && username.toLowerCase() === 'lakshya') {
+        return { label: 'ADMIN', title: 'Admin', className: 'role-admin' };
+    }
+    if (!rawRole) {
+        return { label: 'MEMBER', title: 'Member', className: 'role-member' };
+    }
+    const r = rawRole.trim().toUpperCase().replace(/_/g, ' ');
+    if (r === 'ADMIN') {
+        return { label: 'ADMIN', title: 'Admin', className: 'role-admin' };
+    } else if (r === 'PRESIDENT') {
+        return { label: 'PRESIDENT', title: 'President', className: 'role-president' };
+    } else if (r === 'VICE PRESIDENT' || r === 'VISE PRESIDENT') {
+        return { label: 'VICE PRESIDENT', title: 'Vice President', className: 'role-vice-president' };
+    } else if (r === 'CORE MEMBER' || r === 'CORE MEMBERS') {
+        return { label: 'CORE MEMBER', title: 'Core Member', className: 'role-core-member' };
+    } else {
+        return { label: r, title: r.charAt(0).toUpperCase() + r.slice(1).toLowerCase(), className: 'role-member' };
+    }
+}
+
 function loadLeaderboardPageData() {
     fetch(`${API_BASE}/users/leaderboard`)
     .then(res => res.json())
@@ -668,22 +689,13 @@ function loadLeaderboardPageData() {
                 else if (index === 1) rankClass = 'rank-2';
                 else if (index === 2) rankClass = 'rank-3';
                 
+                const roleInfo = getRoleBadgeInfo(u.role, u.username);
+
                 tr.innerHTML = `
                     <td><span class="rank-circle-td ${rankClass}">${index + 1}</span></td>
                     <td class="font-bold">${u.username}</td>
                     <td>${u.points} XP</td>
-                    <td><span style="
-                        display: inline-block;
-                        padding: 2px 10px;
-                        border-radius: 20px;
-                        font-size: 11px;
-                        font-weight: 700;
-                        letter-spacing: 0.5px;
-                        text-transform: uppercase;
-                        ${u.role === 'ADMIN'
-                            ? 'background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3);'
-                            : 'background: rgba(255,255,255,0.06); color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.08);'}
-                    ">${u.role || 'MEMBER'}</span></td>
+                    <td><span class="role-badge ${roleInfo.className}">${roleInfo.label}</span></td>
                 `;
                 fullTableBody.appendChild(tr);
             });
@@ -1610,7 +1622,9 @@ function loadProfilePageData() {
 
             const roleElem = document.getElementById('profileRoleBadge');
             if (roleElem) {
-                roleElem.textContent = (user.role === 'ADMIN' || (user.username && user.username.toLowerCase() === 'lakshya')) ? 'Admin' : 'Member';
+                const roleInfo = getRoleBadgeInfo(user.role, user.username);
+                roleElem.textContent = roleInfo.title;
+                roleElem.className = `profile-role-badge ${roleInfo.className}`;
             }
 
             const yearElem = document.getElementById('profileYearBadge');

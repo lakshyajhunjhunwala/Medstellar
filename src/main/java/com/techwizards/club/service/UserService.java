@@ -367,7 +367,9 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
         user.setApprovalStatus("APPROVED");
-        user.setRole("MEMBER");
+        if (user.getRole() == null || user.getRole().trim().isEmpty() || "PENDING".equalsIgnoreCase(user.getRole())) {
+            user.setRole("MEMBER");
+        }
         User updated = userRepository.save(user);
 
         securityLogRepository.save(new SecurityLog("Access Control", "SUCCESS",
