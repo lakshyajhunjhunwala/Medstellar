@@ -672,7 +672,18 @@ function loadLeaderboardPageData() {
                     <td><span class="rank-circle-td ${rankClass}">${index + 1}</span></td>
                     <td class="font-bold">${u.username}</td>
                     <td>${u.points} XP</td>
-                    <td><i data-lucide="flame" class="fire-icon" style="width: 14px; display:inline-block; vertical-align:middle; margin-right:4px;"></i>${u.streak} Days</td>
+                    <td><span style="
+                        display: inline-block;
+                        padding: 2px 10px;
+                        border-radius: 20px;
+                        font-size: 11px;
+                        font-weight: 700;
+                        letter-spacing: 0.5px;
+                        text-transform: uppercase;
+                        ${u.role === 'ADMIN'
+                            ? 'background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3);'
+                            : 'background: rgba(255,255,255,0.06); color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.08);'}
+                    ">${u.role || 'MEMBER'}</span></td>
                 `;
                 fullTableBody.appendChild(tr);
             });
